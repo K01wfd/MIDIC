@@ -1,96 +1,123 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font: inherit;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+html {
+  font-size: 62.5%;
 }
 
 body {
-  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: #fdfdfd;
+  position: relative;
+}
+nav {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
-  text-align: center;
+  background-color: #012264;
 }
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+menu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #3178c6aa);
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  border: none;
+  border-radius: 0.4rem;
+  padding: 1.2rem;
+  color: #fdfdfd;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+  background-color: rgb(0, 89, 255);
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+#app {
+  background-color: #121212;
+  min-height: 100dvh;
+  padding: 1.2rem;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.transpose {
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 2.2rem;
+  #transpose-value {
+    text-align: center;
   }
-  a:hover {
-    color: #747bff;
+  > * {
+    width: 25%;
   }
+}
+
+.userScale {
+  background-color: #012264;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.2rem;
   button {
-    background-color: #f9f9f9;
+    padding: 1.4rem;
+    font-size: 1.5rem;
   }
+}
+
+.tunning-range {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 1rem;
+  span {
+    font-weight: 600;
+    font-size: 1.8rem;
+  }
+}
+.userScale-top {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  justify-content: center;
+}
+.userScale-top__left,
+.userScale-top__right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.userScale-bottom {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  justify-content: center;
+  button {
+    padding: 1.6rem;
+  }
+}
+
+.scale-presets {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 0;
+  background-color: #012264;
+  padding: 2rem;
+}
+
+.btn-active {
+  outline: 1px solid rgb(255, 208, 0);
+  outline-offset: 0.4rem;
+  box-shadow: 0 0 1.8rem 0.5rem rgba(255, 208, 0, 0.5);
 }

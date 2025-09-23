@@ -11,12 +11,10 @@
       <nav>
         <menu>
           <li>
-            Triton
-            <label><input type="checkbox" id="triton" value="triton" /></label>
+            <button id="triton" value="triton">Triton</button>
           </li>
           <li>
-            01/wfd
-            <label><input type="checkbox" id="zeroOne" value="zeroOne" /></label>
+            <button id="zeroOne" value="zeroOne">K01/wfd</button>
           </li>
           <li><button id="reset-global">Global Reset</button></li>
         </menu>
@@ -27,12 +25,7 @@
           <div id="transpose-value">0</div>
           <button id="transpose+" data-id="transpose-btn" style="background-color: rgb(217, 13, 74)">+</button>
         </div>
-        <div class="userScale" style="display: none">
-          <div class="tunning-range">
-            <input type="range" id="tunning-range" min="-99" max="99" value="-50" step="1" />
-            <span id="tunning-range-value">-50</span>
-          </div>
-
+        <div class="userScale">
           <div class="userScale-top">
             <div class="userScale-top__left">
               <button data-id="userscale-btn" data-index="2" value="-50" data-portion="1">C#</button>
@@ -58,6 +51,12 @@
             <button data-id="scale-preset-btn" value="BD">Bayat D</button>
             <button data-id="scale-preset-btn" value="BG">Bayat G</button>
             <button data-id="scale-preset-btn" value="BA">Bayat A</button>
+          </div>
+        </div>
+        <div class="settings" style="display: none">
+          <div class="tunning-range">
+            <input type="range" id="tunning-range" min="-99" max="99" value="-50" step="1" />
+            <span id="tunning-range-value">-50</span>
           </div>
         </div>
       </main>
