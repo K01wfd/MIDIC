@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="app">
+      <nav>
+        <menu>
+          <li>
+            Triton
+            <label><input type="checkbox" id="triton" value="triton" /></label>
+          </li>
+          <li>
+            01/wfd
+            <label><input type="checkbox" id="zeroOne" value="zeroOne" /></label>
+          </li>
+          <li><button id="reset-global">Global Reset</button></li>
+        </menu>
+      </nav>
+      <main>
+        <div class="transpose">
+          <button id="transpose-" data-id="transpose-btn" style="background-color: rgb(45, 210, 205)">-</button>
+          <div id="transpose-value">0</div>
+          <button id="transpose+" data-id="transpose-btn" style="background-color: rgb(217, 13, 74)">+</button>
+        </div>
+        <div class="userScale" style="display: none">
+          <div class="tunning-range">
+            <input type="range" id="tunning-range" min="-99" max="99" value="-50" step="1" />
+            <span id="tunning-range-value">-50</span>
+          </div>
+
+          <div class="userScale-top">
+            <div class="userScale-top__left">
+              <button data-id="userscale-btn" data-index="2" value="-50" data-portion="1">C#</button>
+              <button data-id="userscale-btn" data-index="4" value="-50" data-portion="1">D#</button>
+            </div>
+            <div class="userScale-top__right">
+              <button data-id="userscale-btn" data-index="0" value="-50" data-portion="2">F#</button>
+              <button data-id="userscale-btn" data-index="2" value="-50" data-portion="2">G#</button>
+              <button data-id="userscale-btn" data-index="4" value="-50" data-portion="2">A#</button>
+            </div>
+          </div>
+          <div class="userScale-bottom">
+            <button data-id="userscale-btn" data-index="1" value="-50" data-portion="1">C</button>
+            <button data-id="userscale-btn" data-index="3" value="-50" data-portion="1">D</button>
+            <button data-id="userscale-btn" data-index="5" value="-50" data-portion="1">E</button>
+            <button data-id="userscale-btn" data-index="6" value="-50" data-portion="1">F</button>
+            <button data-id="userscale-btn" data-index="1" value="-50" data-portion="2">G</button>
+            <button data-id="userscale-btn" data-index="3" value="-50" data-portion="2">A</button>
+            <button data-id="userscale-btn" data-index="5" value="-50" data-portion="2">B</button>
+          </div>
+          <div class="scale-presets">
+            <button data-id="scale-preset-btn" value="BC">Bayat C</button>
+            <button data-id="scale-preset-btn" value="BD">Bayat D</button>
+            <button data-id="scale-preset-btn" value="BG">Bayat G</button>
+            <button data-id="scale-preset-btn" value="BA">Bayat A</button>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
