@@ -1,8 +1,8 @@
-const tritonSynthBtn = document.getElementById('triton') as HTMLButtonElement;
-const zeroOneSynthBtn = document.getElementById('zeroOne') as HTMLButtonElement;
-const globalResetBtn = document.getElementById('reset-global') as HTMLButtonElement;
+const tritonSynthBtn = document.getElementById('triton');
+const zeroOneSynthBtn = document.getElementById('zeroOne');
+const globalResetBtn = document.getElementById('reset-global');
 
-let selectedSynths: string[] = [];
+let selectedSynths = [];
 
 tritonSynthBtn.addEventListener('click', (_) => {
   tritonSynthBtn.classList.toggle('btn-active');

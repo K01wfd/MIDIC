@@ -1,7 +1,7 @@
 class tritonMIDI extends EventTarget {
-  private access: MIDIAccess | null;
-  private output: MIDIOutput | null;
-  private input: MIDIInput | null;
+  access = null;
+  output = null;
+  input = null;
   execCounter = 0;
   constructor() {
     super();
@@ -11,12 +11,12 @@ class tritonMIDI extends EventTarget {
     this.#initConnection();
   }
 
-  changePatchNumber(channel: number, progNumber: number) {
+  changePatchNumber(channel, progNumber) {
     if (!this.output) return;
     this.output.send([0xc0 | channel, progNumber]);
   }
 
-  sendMessage(data: number[]) {
+  sendMessage(data) {
     if (!this.output) throw new Error('Error sending data, no output');
     this.output.send(data);
   }
@@ -24,20 +24,20 @@ class tritonMIDI extends EventTarget {
   async #initConnection() {
     try {
       this.access = await navigator.requestMIDIAccess({ sysex: true });
-      if (!this.access) {
-        throw new Error('No MIDI Interface connected');
-      }
       // Collect outputs
       this.access.outputs.forEach((output) => {
         this.output = output;
       });
 
+      // if (this.access.inputs.size === 0) {
+      //   alert('No MIDI Input Interface Connected');
+      // }
       // Collect inputs and add listeners
       this.access.inputs.forEach((input) => {
         this.input = input;
         input.onmidimessage = (msg) => this.#handleMIDIMessage(msg);
       });
-      alert('✅ MIDI IS SUPPORTED ✅');
+      // alert('✅ MIDI IS SUPPORTED ✅');
       // Notify when ready
       this.dispatchEvent(new CustomEvent('ready'));
     } catch (err) {
@@ -46,7 +46,7 @@ class tritonMIDI extends EventTarget {
     }
   }
 
-  #handleMIDIMessage(message: MIDIMessageEvent) {
+  #handleMIDIMessage(message) {
     if (!message.data) return;
     const data = Array.from(message.data);
 
@@ -55,4 +55,4 @@ class tritonMIDI extends EventTarget {
   }
 }
 
-export const trMIDI = new tritonMIDI();
+const trMIDI = new tritonMIDI();

@@ -1,6 +1,4 @@
-import type { ITRITON_MESSAGES } from '../types/messages';
-
-export const TRITON_MESSAGES: ITRITON_MESSAGES = {
+const TRITON_MESSAGES = {
   globalRequest: [0xf0, 0x42, 0x30, 0x50, 0x0e, 0x01, 0xf7],
   tunningTemp1: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
   tunningReady1: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
@@ -8,17 +6,17 @@ export const TRITON_MESSAGES: ITRITON_MESSAGES = {
   tunningReady2: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
 };
 
-export let TRITON_TRANSPOSE_PORTION_TEMP: number[] = [0, 0, 0, 0, 0, 0, 0];
-export let TRITON_TRANSPOSE_PORTION: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
-
-export const TRITON_TUNNING_DEFAULT: ITRITON_MESSAGES = {
+const TRITON_TUNNING_DEFAULT = {
   tunningTemp1: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
   tunningReady1: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
   tunningTemp2: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
   tunningReady2: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
 };
 
-export const TRITON_DEF_GLOB: number[] = [
+let TRITON_TRANSPOSE_PORTION_TEMP = [0, 0, 0, 0, 0, 0, 0];
+let TRITON_TRANSPOSE_PORTION = [0, 0, 0, 0, 0, 0, 0, 0];
+
+const TRITON_DEF_GLOB = [
   240, 66, 48, 80, 81, 1, 0, 0, 0, 3, 3, 28, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -51,7 +49,7 @@ export const TRITON_DEF_GLOB: number[] = [
   115, 32, 32, 0, 32, 32, 32, 32, 32, 32, 32, 0, 127, 0, 0, 0, 0, 127, 127, 0, 0, 0, 0, 127, 0, 0, 0, 0, 12, 127, 127, 0, 0,
   12, 127, 0, 0, 0, 0, 12, 127, 127, 0, 0, 0, 12, 247,
 ];
-export let TRITON_MODF_GLOB: number[] = [
+let TRITON_MODF_GLOB = [
   240, 66, 48, 80, 81, 1, 3, 127, 127, 3, 3, 28, 0, 7, 126, 0, 127, 126, 127, 126, 127, 127, 127, 127, 127, 127, 127, 126,
   127, 126, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
