@@ -29,9 +29,9 @@ class tritonMIDI extends EventTarget {
         this.output = output;
       });
 
-      // if (this.access.inputs.size === 0) {
-      //   alert('No MIDI Input Interface Connected');
-      // }
+      if (this.access.inputs.size === 0) {
+        alert('No MIDI Input Interface Connected');
+      }
       // Collect inputs and add listeners
       this.access.inputs.forEach((input) => {
         this.input = input;
