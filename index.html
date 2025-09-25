@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="style.css" />
     <title>MIDI CONTROLLER</title>
   </head>
   <body>
@@ -17,7 +17,11 @@
           <li>
             <button id="zeroOne" value="zeroOne">K01/wfd</button>
           </li>
-          <li><button id="reset-global">Reset</button></li>
+          <li>
+            <div id="reset-global-wrapper">
+              <button id="reset-global">Reset</button>
+            </div>
+          </li>
         </menu>
       </nav>
       <main>
@@ -60,6 +64,7 @@
             <span id="tunning-range-value">-50</span>
           </div>
         </div>
+        <div id="message" style="display: none"></div>
       </main>
     </div>
     <script src="/data/triton.js"></script>

@@ -2,14 +2,20 @@ const transposeButtons = document.querySelectorAll('[data-id="transpose-btn"]');
 const transposeValue = document.getElementById('transpose-value');
 const userScaleButtons = document.querySelectorAll('[data-id="userscale-btn"]');
 const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-btn"]');
+const resetBtnWrapper = document.getElementById('reset-global-wrapper');
 const resetBtn = document.getElementById('reset-global');
+const message = document.getElementById('message');
 
 let currentTransposeValue = +transposeValue.textContent;
 let tunningValue = -50;
+let resetTimes = 0;
 
 transposeButtons.forEach((btn) => {
   btn.addEventListener('click', (_) => {
-    if (selectedSynths.length === 0) return;
+    if (selectedSynths.length === 0) {
+      showMessage('Please Select a model');
+      return;
+    }
     const btnType = btn.id === 'transpose+' ? '+' : '-';
 
     if (btnType === '+' && currentTransposeValue < 12) {
@@ -27,7 +33,10 @@ transposeButtons.forEach((btn) => {
 });
 
 transposeValue.addEventListener('click', (_) => {
-  if (selectedSynths.length === 0) return;
+  if (selectedSynths.length === 0) {
+    showMessage('Please Select a model');
+    return;
+  }
   transposeValue.textContent = '0';
   currentTransposeValue = 0;
   selectedSynths.forEach((synth) => sender[synth].sendZeroTranspose());
@@ -36,7 +45,10 @@ transposeValue.addEventListener('click', (_) => {
 
 userScaleButtons.forEach((btn) => {
   btn.addEventListener('click', (_) => {
-    if (selectedSynths.length === 0) return;
+    if (selectedSynths.length === 0) {
+      showMessage('Please Select a model');
+      return;
+    }
     btn.classList.toggle('btn-active');
     if (!btn.classList.contains('btn-active')) {
       btn.value = 0;
@@ -52,7 +64,10 @@ userScaleButtons.forEach((btn) => {
 
 scalePresetsButtons.forEach((btn) => {
   btn.addEventListener('click', (_) => {
-    if (selectedSynths.length === 0) return;
+    if (selectedSynths.length === 0) {
+      showMessage('Please Select a model');
+      return;
+    }
     userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
     const scaleType = btn.value;
     if (!btn.classList.contains('btn-active')) {
@@ -68,10 +83,37 @@ scalePresetsButtons.forEach((btn) => {
 });
 
 resetBtn.addEventListener('click', (_) => {
+  if (resetTimes > 0) {
+    showMessage('Global was recently reseted!');
+    return;
+  }
+
   sender.triton.resetGlobal();
   sender.zeroOne.resetGlobal();
   currentTransposeValue = 0;
   transposeValue.textContent = 0;
   transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
   userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  showIcon(resetBtnWrapper, '✅');
+  resetTimes++;
 });
+
+function showMessage(msg) {
+  message.textContent = msg;
+  message.style.display = 'block';
+  setTimeout(() => (message.style.display = 'none'), 4000);
+}
+function showIcon(targetElement, icon) {
+  const iconElement = document.createElement('span');
+  iconElement.innerHTML = icon;
+  iconElement.classList.add('icon');
+  targetElement.appendChild(iconElement);
+}
+
+document.addEventListener(
+  'dblclick',
+  function (event) {
+    event.preventDefault();
+  },
+  { passive: false }
+);

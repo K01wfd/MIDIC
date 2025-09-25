@@ -17,6 +17,7 @@ body {
   color: #fdfdfd;
   position: relative;
 }
+
 nav {
   display: flex;
   align-items: center;
@@ -24,12 +25,20 @@ nav {
   padding: 2rem;
   background-color: #012264;
 }
+
 menu {
   list-style: none;
   display: flex;
   justify-content: center;
   gap: 2rem;
 }
+
+#reset-global-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 button {
   border: none;
   border-radius: 0.4rem;
@@ -38,6 +47,7 @@ button {
   font-weight: 500;
   background-color: rgb(0, 89, 255);
 }
+
 #app {
   background-color: #121212;
   min-height: 100dvh;
@@ -87,6 +97,7 @@ button {
     font-size: 1.8rem;
   }
 }
+
 .userScale-top {
   margin-top: 1rem;
   display: flex;
@@ -94,12 +105,14 @@ button {
   gap: 4rem;
   justify-content: center;
 }
+
 .userScale-top__left,
 .userScale-top__right {
   display: flex;
   align-items: center;
   gap: 1.2rem;
 }
+
 .userScale-bottom {
   display: flex;
   align-items: center;
@@ -125,4 +138,26 @@ button {
   outline: 1px solid rgb(255, 208, 0);
   outline-offset: 0.4rem;
   box-shadow: 0 0 1.8rem 0.5rem rgba(255, 208, 0, 0.5);
+}
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #002879;
+  position: absolute;
+  right: 3%;
+  top: 5%;
+  font-size: 2.8rem;
+}
+#message {
+  padding: 2rem;
+  border-radius: 0.4rem;
+  background-color: #012264;
+  color: rgb(0, 255, 149);
+  font-weight: 500;
+  font-size: 1.4rem;
+  margin: 0 auto;
+  margin-top: 2rem;
+  max-width: 70%;
+  text-align: center;
 }
