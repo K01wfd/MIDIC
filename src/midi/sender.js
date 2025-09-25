@@ -172,6 +172,8 @@ const sender = {
       const dump = ZERO_ONE_MODF_GLOBAL;
       trMIDI.sendMessage(dump);
     },
-    resetGlobal() {},
+    resetGlobal() {
+      trMIDI.sendMessage(ZER_ONE_GLOBAL);
+    },
   },
 };

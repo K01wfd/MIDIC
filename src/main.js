@@ -1,6 +1,7 @@
 const transposeButtons = document.querySelectorAll('[data-id="transpose-btn"]');
 const transposeValue = document.getElementById('transpose-value');
 const userScaleButtons = document.querySelectorAll('[data-id="userscale-btn"]');
+const resetBtn = document.getElementById('reset-global');
 
 let currentTransposeValue = +transposeValue.textContent;
 let tunningValue = -50;
@@ -46,4 +47,13 @@ userScaleButtons.forEach((btn) => {
     const btnPortion = +btn.dataset.portion;
     selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnIndex, btnValue, btnPortion, btn.textContent));
   });
+});
+
+resetBtn.addEventListener('click', (_) => {
+  sender.triton.resetGlobal();
+  sender.zeroOne.resetGlobal();
+  currentTransposeValue = 0;
+  transposeValue.textContent = 0;
+  transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
 });
