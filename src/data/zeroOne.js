@@ -1,4 +1,4 @@
-const ZERO_ONE_MESSAGES = {
+let ZERO_ONE_MESSAGES = {
   tunningTemp1: [0, 0, 0, 0, 0, 0, 0],
   tunningReady1: [0, 0, 0, 0, 0, 0, 0, 0],
   tunningTemp2: [0, 0, 0, 0, 0, 3, 3],

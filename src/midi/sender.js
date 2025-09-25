@@ -1,7 +1,7 @@
 const sender = {
   triton: {
     requestGlobalDump: function () {
-      const msg = TRITON_MESSAGES['globalRequest'];
+      const msg = ZERO_ONE_MESSAGES['globalRequest'];
       if (msg) trMIDI.sendMessage(msg);
     },
     sendScaleTunning: function (index, value, portionNum) {
@@ -25,10 +25,11 @@ const sender = {
       const dumpTail = TRITON_MODF_GLOB.slice(30);
       const tunningBody = [...TRITON_TUNNING_DEFAULT.tunningReady1, ...TRITON_TUNNING_DEFAULT.tunningReady2];
       const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
-      updateArray(TRITON_MODF_GLOB, combined);
+      TRITON_MODF_GLOB = combined;
       trMIDI.sendMessage(TRITON_MODF_GLOB);
     },
     sendScalePreset: function (scaleType, tunningValue) {
+      TRITON_MESSAGES = JSON.parse(JSON.stringify(TRITON_TUNNING_DEFAULT));
       const dumpHeader = TRITON_MODF_GLOB.slice(0, 14);
       const dumpTail = TRITON_MODF_GLOB.slice(30);
       switch (scaleType) {
@@ -66,7 +67,7 @@ const sender = {
 
       const tunningBody = [...TRITON_MESSAGES.tunningReady1, ...TRITON_MESSAGES.tunningReady2];
       const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
-      updateArray(TRITON_MODF_GLOB, combined);
+      TRITON_MODF_GLOB = combined;
       trMIDI.sendMessage(TRITON_MODF_GLOB);
     },
     sendTranspose: function (transposeValue) {
@@ -159,8 +160,56 @@ const sender = {
       ZERO_ONE_MODF_GLOBAL = combined;
       trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
     },
-    sendZeroTunning() {},
-    sendScalePreset(scaleType, tunningValue) {},
+    sendZeroTunning() {
+      const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
+      const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
+      const tunningBody = [...ZERO_ONE_TUNNING_DEFAULT.tunningReady1, ...ZERO_ONE_TUNNING_DEFAULT.tunningReady2];
+      const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
+      ZERO_ONE_MODF_GLOBAL = combined;
+      trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
+    },
+    sendScalePreset(scaleType, tunningValue) {
+      ZERO_ONE_MESSAGES = JSON.parse(JSON.stringify(ZERO_ONE_TUNNING_DEFAULT));
+      const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
+      const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
+
+      switch (scaleType) {
+        case 'BC': {
+          ZERO_ONE_MESSAGES.tunningTemp1[2] = tunningValue;
+          ZERO_ONE_MESSAGES.tunningReady1 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp1);
+          ZERO_ONE_MESSAGES.tunningTemp2[2] = tunningValue;
+          ZERO_ONE_MESSAGES.tunningReady2 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp2);
+          break;
+        }
+        case 'BD': {
+          ZERO_ONE_MESSAGES.tunningTemp1[4] = tunningValue;
+          ZERO_ONE_MESSAGES.tunningReady1 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp1);
+          ZERO_ONE_MESSAGES.tunningTemp2[4] = tunningValue;
+          ZERO_ONE_MESSAGES.tunningReady2 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp2);
+          break;
+        }
+        case 'BG': {
+          ZERO_ONE_MESSAGES.tunningTemp1[4] = tunningValue;
+          ZERO_ONE_MESSAGES.tunningReady1 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp1);
+          ZERO_ONE_MESSAGES.tunningTemp2[2] = tunningValue;
+          ZERO_ONE_MESSAGES.tunningReady2 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp2);
+          break;
+        }
+        case 'BA': {
+          ZERO_ONE_MESSAGES.tunningTemp1[6] = tunningValue;
+          ZERO_ONE_MESSAGES.tunningReady1 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp1);
+          ZERO_ONE_MESSAGES.tunningTemp2[4] = tunningValue;
+          ZERO_ONE_MESSAGES.tunningReady2 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp2);
+          break;
+        }
+        default:
+          return;
+      }
+      const tunningBody = [...ZERO_ONE_MESSAGES.tunningReady1, ...ZERO_ONE_MESSAGES.tunningReady2];
+      const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
+      ZERO_ONE_MODF_GLOBAL = combined;
+      trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
+    },
 
     sendZeroTranspose() {
       updateZeroOneTransposeGlob(0);

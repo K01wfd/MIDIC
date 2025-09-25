@@ -1,6 +1,7 @@
 const transposeButtons = document.querySelectorAll('[data-id="transpose-btn"]');
 const transposeValue = document.getElementById('transpose-value');
 const userScaleButtons = document.querySelectorAll('[data-id="userscale-btn"]');
+const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-btn"]');
 const resetBtn = document.getElementById('reset-global');
 
 let currentTransposeValue = +transposeValue.textContent;
@@ -46,6 +47,23 @@ userScaleButtons.forEach((btn) => {
     const btnIndex = +btn.dataset.index;
     const btnPortion = +btn.dataset.portion;
     selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnIndex, btnValue, btnPortion, btn.textContent));
+  });
+});
+
+scalePresetsButtons.forEach((btn) => {
+  btn.addEventListener('click', (_) => {
+    if (selectedSynths.length === 0) return;
+    userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+    const scaleType = btn.value;
+    if (!btn.classList.contains('btn-active')) {
+      scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
+      btn.classList.add('btn-active');
+      selectedSynths.forEach((synth) => sender[synth].sendScalePreset(scaleType, tunningValue));
+    } else {
+      btn.classList.remove('btn-active');
+      userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+      selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
+    }
   });
 });
 
