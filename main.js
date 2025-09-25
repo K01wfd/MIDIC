@@ -90,11 +90,19 @@ resetBtn.addEventListener('click', (_) => {
 
   sender.triton.resetGlobal();
   sender.zeroOne.resetGlobal();
+
   currentTransposeValue = 0;
   transposeValue.textContent = 0;
+
   transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
   userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  tritonSynthBtn.classList.remove('btn-active');
+  zeroOneSynthBtn.classList.remove('btn-active');
+
   showIcon(resetBtnWrapper, '✅');
+
+  localStorage.removeItem('midi');
+  selectedSynths = [];
   resetTimes++;
 });
 

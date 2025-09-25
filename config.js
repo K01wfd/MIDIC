@@ -2,10 +2,11 @@ const tritonSynthBtn = document.getElementById('triton');
 const zeroOneSynthBtn = document.getElementById('zeroOne');
 const globalResetBtn = document.getElementById('reset-global');
 
+alert('Please RESET first!');
 let selectedSynths = [];
 
 const savedSynths = JSON.parse(localStorage.getItem('midi'));
-if (savedSynths.synths) {
+if (savedSynths && savedSynths.synths) {
   selectedSynths = [...savedSynths.synths];
 }
 
