@@ -57,6 +57,7 @@ button {
     border-radius: 0.4rem;
     background-color: #012264;
     max-width: 80px;
+    cursor: pointer;
   }
   > * {
     width: 25%;

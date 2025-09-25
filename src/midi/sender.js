@@ -17,8 +17,7 @@ const sender = {
 
       const tunningBody = [...TRITON_MESSAGES.tunningReady1, ...TRITON_MESSAGES.tunningReady2];
       const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
-
-      updateArray(TRITON_MODF_GLOB, combined);
+      TRITON_MODF_GLOB = combined;
       trMIDI.sendMessage(TRITON_MODF_GLOB);
     },
     sendZeroTunning: function () {
@@ -28,9 +27,6 @@ const sender = {
       const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
       updateArray(TRITON_MODF_GLOB, combined);
       trMIDI.sendMessage(TRITON_MODF_GLOB);
-    },
-    resetGlobal: function () {
-      trMIDI.sendMessage(TRITON_DEF_GLOB);
     },
     sendScalePreset: function (scaleType, tunningValue) {
       const dumpHeader = TRITON_MODF_GLOB.slice(0, 14);
@@ -74,25 +70,108 @@ const sender = {
       trMIDI.sendMessage(TRITON_MODF_GLOB);
     },
     sendTranspose: function (transposeValue) {
-      const convertedValue = +toHex7bit(transposeValue);
+      const convertedValue = '0x' + toHex7bit(transposeValue);
       const msg = [0xf0, 0x7f, 0x00, 0x04, 0x04, 0x00, convertedValue, 0xf7];
-      // trMIDI.sendMessage(msg);
+      trMIDI.sendMessage(msg);
       updateTritonTransposeGlob(transposeValue - 64);
-      console.log(TRITON_MODF_GLOB);
+    },
+    sendZeroTranspose() {
+      const convertedValue = '0x' + toHex7bit(64);
+      const msg = [0xf0, 0x7f, 0x00, 0x04, 0x04, 0x00, convertedValue, 0xf7];
+      trMIDI.sendMessage(msg);
+      updateTritonTransposeGlob(0);
+    },
+    resetGlobal: function () {
+      trMIDI.sendMessage(TRITON_DEF_GLOB);
     },
   },
   zeroOne: {
     requestGlobalDump() {},
-    sendScaleTunning(index, value, portionNum) {},
-    sendScalePreset(scaleType, tunningValue) {},
+    sendScaleTunning(index, value, portionNum, key = '') {
+      let keyIndex = index;
+      switch (key) {
+        case 'C': {
+          keyIndex = 0;
+          break;
+        }
+        case 'C#': {
+          keyIndex = 1;
+          break;
+        }
+        case 'D': {
+          keyIndex = 2;
+          break;
+        }
+        case 'D#': {
+          keyIndex = 3;
+          break;
+        }
+        case 'E': {
+          keyIndex = 4;
+          break;
+        }
+        case 'F': {
+          keyIndex = 5;
+          break;
+        }
+        case 'F#': {
+          keyIndex = 6;
+          break;
+        }
+        case 'G': {
+          keyIndex = 0;
+          break;
+        }
+        case 'G#': {
+          keyIndex = 1;
+          break;
+        }
+        case 'A': {
+          keyIndex = 2;
+          break;
+        }
+        case 'A#': {
+          keyIndex = 3;
+          break;
+        }
+        case 'B': {
+          keyIndex = 4;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
+      const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
+      if (portionNum === 1) {
+        ZERO_ONE_MESSAGES.tunningTemp1[keyIndex] = value;
+        ZERO_ONE_MESSAGES.tunningReady1 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp1);
+      } else if (portionNum === 2 && key === 'F#') {
+        ZERO_ONE_MESSAGES.tunningTemp1[keyIndex] = value;
+        ZERO_ONE_MESSAGES.tunningReady1 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp1);
+      } else {
+        ZERO_ONE_MESSAGES.tunningTemp2[keyIndex] = value;
+        ZERO_ONE_MESSAGES.tunningReady2 = encode7bitTo8(ZERO_ONE_MESSAGES.tunningTemp2);
+      }
+      const tunningBody = [...ZERO_ONE_MESSAGES.tunningReady1, ...ZERO_ONE_MESSAGES.tunningReady2];
+      const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
+      ZERO_ONE_MODF_GLOBAL = combined;
+      trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
+    },
     sendZeroTunning() {},
-    resetGlobal() {},
+    sendScalePreset(scaleType, tunningValue) {},
 
+    sendZeroTranspose() {
+      updateZeroOneTransposeGlob(0);
+      const dump = ZERO_ONE_MODF_GLOBAL;
+      trMIDI.sendMessage(dump);
+    },
     sendTranspose(transposeValue) {
       updateZeroOneTransposeGlob(transposeValue - 64);
       const dump = ZERO_ONE_MODF_GLOBAL;
-      // trMIDI.sendMessage(dump);
-      console.log(ZERO_ONE_MODF_GLOBAL);
+      trMIDI.sendMessage(dump);
     },
+    resetGlobal() {},
   },
 };

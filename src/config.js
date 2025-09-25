@@ -15,7 +15,6 @@ tritonSynthBtn.addEventListener('click', (_) => {
     const synthName = selectedSynths[tritonIndex];
     selectedSynths = selectedSynths.filter((synth) => synth !== synthName);
   }
-  console.log(selectedSynths);
 });
 zeroOneSynthBtn.addEventListener('click', (_) => {
   zeroOneSynthBtn.classList.toggle('btn-active');
@@ -28,5 +27,4 @@ zeroOneSynthBtn.addEventListener('click', (_) => {
     const synthName = selectedSynths[tritonIndex];
     selectedSynths = selectedSynths.filter((synth) => synth !== synthName);
   }
-  console.log(selectedSynths);
 });
