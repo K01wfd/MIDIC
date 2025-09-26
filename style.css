@@ -156,14 +156,15 @@ button {
 #message {
   padding: 2rem;
   border-radius: 0.4rem;
-  background-color: #012264;
+  background-color: #015364;
   color: rgb(0, 255, 149);
   font-weight: 500;
-  font-size: 1.4rem;
-  margin: 0 auto;
-  margin-top: 2rem;
+  font-size: 2rem;
   max-width: 70%;
   text-align: center;
+  position: absolute;
+  right: 2%;
+  top: 4%;
 }
 @media screen and (min-width: 480px) {
   .userScale button {

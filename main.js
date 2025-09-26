@@ -5,6 +5,7 @@ const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-bt
 const resetBtnWrapper = document.getElementById('reset-global-wrapper');
 const resetBtn = document.getElementById('reset-global');
 const message = document.getElementById('message');
+const k01controllerBtn = document.getElementById('k01-controller');
 
 let currentTransposeValue = +transposeValue.textContent;
 let tunningValue = -50;
@@ -111,6 +112,7 @@ function showMessage(msg) {
   message.style.display = 'block';
   setTimeout(() => (message.style.display = 'none'), 4000);
 }
+
 function showIcon(targetElement, icon) {
   const iconElement = document.createElement('span');
   iconElement.innerHTML = icon;
@@ -118,6 +120,9 @@ function showIcon(targetElement, icon) {
   targetElement.appendChild(iconElement);
 }
 
+k01controllerBtn.addEventListener('click', (_) => {
+  window.location.replace('https://k01wfd.github.io/KORG01WFD_MIDI_CONTROLLER/');
+});
 document.addEventListener(
   'dblclick',
   function (event) {
