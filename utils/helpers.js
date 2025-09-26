@@ -24,6 +24,10 @@ function toHex7bit(value) {
   return byte.toString(16).toUpperCase().padStart(2, '0x');
 }
 
+function resetTunningPortions() {
+  TRITON_TUNNING = JSON.parse(JSON.stringify(TRITON_TUNNING_DEFAULT));
+  ZERO_ONE_TUNNING = JSON.parse(JSON.stringify(ZERO_ONE_TUNNING_DEFAULT));
+}
 function updateTritonTransposeGlob(transposeValue) {
   const dumpHeader = TRITON_MODF_GLOB.slice(0, 6);
   const dumpTail = TRITON_MODF_GLOB.slice(14);
@@ -34,6 +38,7 @@ function updateTritonTransposeGlob(transposeValue) {
 
   TRITON_MODF_GLOB = [...dumpHeader, ...TRITON_TRANSPOSE_PORTION, ...dumpTail];
 }
+
 function updateZeroOneTransposeGlob(transposeValue) {
   const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 6);
   const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(14);
