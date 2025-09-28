@@ -48,9 +48,7 @@ class tritonMIDI extends EventTarget {
   #handleMIDIMessage(message) {
     if (!message.data) return;
     const data = Array.from(message.data);
-
     if (data[0] === 0xfe || data[0] === 0xf8) return;
-    this.dispatchEvent(new CustomEvent('newMessage', { detail: data }));
   }
 }
 

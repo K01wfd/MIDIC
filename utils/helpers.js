@@ -18,6 +18,24 @@ function encode7bitTo8(values) {
   return [flag, ...data];
 }
 
+function encode7bitTo8PA3X(values) {
+  if (values.length !== 7) {
+    throw new Error('Block must contain exactly 7 values');
+  }
+
+  let flag = 0;
+  const data = [];
+
+  for (let i = 0; i < values.length; i++) {
+    if (values[values.length - 1 - i] < 0) {
+      flag |= 1 << i; // set bit i for negative value
+      data.push((128 + values[i]) & 0x7f); // e.g. -1 → 127, -2 → 126
+    } else {
+      data.push(values[i] & 0x7f); // positive or zero
+    }
+  }
+  return [flag, ...data];
+}
 function toHex7bit(value) {
   // Wrap into 7-bit range (0–127)
   const byte = (value + 128) % 128;
@@ -27,6 +45,8 @@ function toHex7bit(value) {
 function resetTunningPortions() {
   TRITON_TUNNING = JSON.parse(JSON.stringify(TRITON_TUNNING_DEFAULT));
   ZERO_ONE_TUNNING = JSON.parse(JSON.stringify(ZERO_ONE_TUNNING_DEFAULT));
+  PA3X_TUNNING = JSON.parse(JSON.stringify(PA3X_TUNNING_DEFAULT));
+  PA3X_TUNNING_BODY = PA3X_TUNNING_BODY_DEFAULT;
 }
 function updateTritonTransposeGlob(transposeValue) {
   const dumpHeader = TRITON_MODF_GLOB.slice(0, 6);

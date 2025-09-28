@@ -1,10 +1,5 @@
 const sender = {
   triton: {
-    requestGlobalDump: function () {
-      const msg = ZERO_ONE_TUNNING['globalRequest'];
-      if (msg) trMIDI.sendMessage(msg);
-    },
-
     sendScaleTunning: function (index, value, portionNum) {
       const dumpHeader = TRITON_MODF_GLOB.slice(0, 14);
       const dumpTail = TRITON_MODF_GLOB.slice(30);
@@ -24,7 +19,6 @@ const sender = {
 
     sendZeroTunning: function () {
       resetTunningPortions();
-
       const dumpHeader = TRITON_MODF_GLOB.slice(0, 14);
       const dumpTail = TRITON_MODF_GLOB.slice(30);
       const tunningBody = [...TRITON_TUNNING_DEFAULT.tunningReady1, ...TRITON_TUNNING_DEFAULT.tunningReady2];
@@ -79,6 +73,7 @@ const sender = {
     sendTranspose: function (transposeValue) {
       const convertedValue = '0x' + toHex7bit(transposeValue);
       const msg = [0xf0, 0x7f, 0x00, 0x04, 0x04, 0x00, convertedValue, 0xf7];
+
       trMIDI.sendMessage(msg);
       updateTritonTransposeGlob(transposeValue - 64);
     },
@@ -95,8 +90,6 @@ const sender = {
     },
   },
   zeroOne: {
-    requestGlobalDump() {},
-
     sendScaleTunning(index, value, portionNum, key = '') {
       let keyIndex = index;
       switch (key) {
@@ -237,6 +230,157 @@ const sender = {
 
     resetGlobal() {
       trMIDI.sendMessage(ZER_ONE_GLOBAL);
+    },
+  },
+
+  pa3x: {
+    sendTranspose(transposeValue) {
+      PA3X_TRANSPOSE_ZERO[6] = transposeValue;
+      trMIDI.sendMessage(PA3X_TRANSPOSE_ZERO);
+    },
+
+    sendZeroTranspose() {
+      PA3X_TRANSPOSE_ZERO[6] = 64;
+      const msg = PA3X_TRANSPOSE_ZERO;
+      trMIDI.sendMessage(msg);
+    },
+
+    sendScaleTunning(index, value, portionNum, key = '') {
+      let keyIndex = index;
+      switch (key) {
+        case 'C': {
+          keyIndex = 2;
+          break;
+        }
+        case 'C#': {
+          keyIndex = 3;
+          break;
+        }
+        case 'D': {
+          keyIndex = 4;
+          break;
+        }
+        case 'D#': {
+          keyIndex = 5;
+          break;
+        }
+        case 'E': {
+          keyIndex = 6;
+          break;
+        }
+        case 'F': {
+          keyIndex = 0;
+          break;
+        }
+        case 'F#': {
+          keyIndex = 1;
+          break;
+        }
+        case 'G': {
+          keyIndex = 2;
+          break;
+        }
+        case 'G#': {
+          keyIndex = 3;
+          break;
+        }
+        case 'A': {
+          keyIndex = 4;
+          break;
+        }
+        case 'A#': {
+          keyIndex = 5;
+          break;
+        }
+        case 'B': {
+          keyIndex = 6;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      const dumpHeader = PA3X_TUNNING_BODY.slice(0, 6);
+      const dumpTail = PA3X_TUNNING_BODY.slice(-1);
+
+      if (portionNum === 1 && key !== 'F') {
+        PA3X_TUNNING.tunningTemp1[keyIndex] = value;
+        PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
+        PA3X_TUNNING.tunningReady1[1] = 125;
+      } else if (portionNum === 1 && key === 'F') {
+        console.log('condition met');
+        PA3X_TUNNING.tunningTemp2[keyIndex] = value;
+        PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+        PA3X_TUNNING.tunningReady1[1] = 125;
+      } else {
+        PA3X_TUNNING.tunningTemp2[keyIndex] = value;
+        PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+        PA3X_TUNNING.tunningReady1[1] = 125;
+      }
+      const tunningBody = [...PA3X_TUNNING.tunningReady1, ...PA3X_TUNNING.tunningReady2];
+      const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
+      PA3X_TUNNING_BODY = combined;
+      trMIDI.sendMessage(PA3X_TUNNING_BODY);
+    },
+
+    sendZeroTunning() {
+      resetTunningPortions();
+      trMIDI.sendMessage(PA3X_TUNNING_BODY_DEFAULT);
+    },
+
+    sendScalePreset(scaleType, tunningValue) {
+      PA3X_TUNNING = JSON.parse(JSON.stringify(PA3X_TUNNING_DEFAULT));
+      const dumpHeader = PA3X_TUNNING_BODY.slice(0, 6);
+      const dumpTail = PA3X_TUNNING_BODY.slice(-1);
+
+      switch (scaleType) {
+        case 'BC': {
+          PA3X_TUNNING.tunningTemp1[4] = tunningValue;
+          PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
+          PA3X_TUNNING.tunningReady1[1] = 125;
+
+          PA3X_TUNNING.tunningTemp2[4] = tunningValue;
+          PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+          break;
+        }
+        case 'BD': {
+          PA3X_TUNNING.tunningTemp1[6] = tunningValue;
+          PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
+          PA3X_TUNNING.tunningReady1[1] = 125;
+
+          PA3X_TUNNING.tunningTemp2[6] = tunningValue;
+          PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+          break;
+        }
+        case 'BG': {
+          PA3X_TUNNING.tunningTemp1[6] = tunningValue;
+          PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
+          PA3X_TUNNING.tunningReady1[1] = 125;
+
+          PA3X_TUNNING.tunningTemp2[4] = tunningValue;
+          PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+          break;
+        }
+        case 'BA': {
+          PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
+          PA3X_TUNNING.tunningReady1[1] = 125;
+
+          PA3X_TUNNING.tunningTemp2[1] = tunningValue;
+          PA3X_TUNNING.tunningTemp2[6] = tunningValue;
+          PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+          break;
+        }
+        default:
+          return;
+      }
+      const tunningBody = [...PA3X_TUNNING.tunningReady1, ...PA3X_TUNNING.tunningReady2];
+      const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
+      PA3X_TUNNING_BODY = combined;
+      trMIDI.sendMessage(PA3X_TUNNING_BODY);
+    },
+    resetGlobal() {
+      this.sendZeroTranspose();
+      this.sendZeroTunning();
     },
   },
 };

@@ -4,6 +4,7 @@ const userScaleButtons = document.querySelectorAll('[data-id="userscale-btn"]');
 const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-btn"]');
 const resetBtnWrapper = document.getElementById('reset-global-wrapper');
 const resetBtn = document.getElementById('reset-global');
+const clearBtn = document.getElementById('clear');
 const message = document.getElementById('message');
 const k01controllerBtn = document.getElementById('k01-controller');
 
@@ -91,20 +92,35 @@ resetBtn.addEventListener('click', (_) => {
 
   sender.triton.resetGlobal();
   sender.zeroOne.resetGlobal();
+  sender.pa3x.resetGlobal();
 
   currentTransposeValue = 0;
   transposeValue.textContent = 0;
 
   transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
   userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
   tritonSynthBtn.classList.remove('btn-active');
   zeroOneSynthBtn.classList.remove('btn-active');
+  pa3xSynthBtn.classList.remove('btn-active');
 
   showIcon(resetBtnWrapper, '✅');
 
   localStorage.removeItem('midi');
   selectedSynths = [];
   resetTimes++;
+});
+clearBtn.addEventListener('click', (_) => {
+  currentTransposeValue = 0;
+  transposeValue.textContent = 0;
+
+  transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
+
+  selectedSynths.forEach((synth) => {
+    sender[synth].resetGlobal();
+  });
 });
 
 function showMessage(msg) {
@@ -123,6 +139,7 @@ function showIcon(targetElement, icon) {
 k01controllerBtn.addEventListener('click', (_) => {
   window.location.replace('https://k01wfd.github.io/KORG01WFD_MIDI_CONTROLLER/');
 });
+
 document.addEventListener(
   'dblclick',
   function (event) {

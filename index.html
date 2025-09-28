@@ -12,6 +12,9 @@
       <nav>
         <menu>
           <li>
+            <button id="pa3x" value="pa3x">PA3X</button>
+          </li>
+          <li>
             <button id="triton" value="triton">Triton</button>
           </li>
           <li>
@@ -27,9 +30,10 @@
       </nav>
       <main>
         <div class="transpose">
-          <button id="transpose-" data-id="transpose-btn" style="background-color: rgb(45, 210, 205)">-</button>
+          <button id="clear">Clear</button>
+          <button id="transpose-" data-id="transpose-btn">-</button>
           <div id="transpose-value">0</div>
-          <button id="transpose+" data-id="transpose-btn" style="background-color: rgb(217, 13, 74)">+</button>
+          <button id="transpose+" data-id="transpose-btn">+</button>
         </div>
         <div class="userScale">
           <div class="userScale-top">
@@ -70,6 +74,7 @@
     </div>
     <script src="data/triton.js"></script>
     <script src="data/zeroOne.js"></script>
+    <script src="data/pa3x.js"></script>
     <script src="utils/helpers.js"></script>
     <script src="midi/connection.js"></script>
     <script src="midi/sender.js"></script>

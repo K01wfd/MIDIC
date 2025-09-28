@@ -1,8 +1,9 @@
+const pa3xSynthBtn = document.getElementById('pa3x');
 const tritonSynthBtn = document.getElementById('triton');
 const zeroOneSynthBtn = document.getElementById('zeroOne');
 const globalResetBtn = document.getElementById('reset-global');
 
-alert('Please RESET first!');
+// alert('Please RESET first!');
 let selectedSynths = [];
 
 const savedSynths = JSON.parse(localStorage.getItem('midi'));
@@ -10,34 +11,27 @@ if (savedSynths && savedSynths.synths) {
   selectedSynths = [...savedSynths.synths];
 }
 
+selectedSynths.indexOf('pa3x') !== -1 && pa3xSynthBtn.classList.add('btn-active');
 selectedSynths.indexOf('triton') !== -1 && tritonSynthBtn.classList.add('btn-active');
 selectedSynths.indexOf('zeroOne') !== -1 && zeroOneSynthBtn.classList.add('btn-active');
-tritonSynthBtn.addEventListener('click', (_) => {
-  tritonSynthBtn.classList.toggle('btn-active');
-  if (tritonSynthBtn.classList.contains('btn-active')) {
-    if (selectedSynths.indexOf('triton') === -1) {
-      selectedSynths.push(tritonSynthBtn.value);
+
+const buttons = [pa3xSynthBtn, tritonSynthBtn, zeroOneSynthBtn];
+
+buttons.forEach((btn) => {
+  btn.addEventListener('click', (_) => {
+    btn.classList.toggle('btn-active');
+    if (btn.classList.contains('btn-active')) {
+      if (selectedSynths.indexOf(btn.value) === -1) {
+        selectedSynths.push(btn.value);
+      }
+    } else {
+      selectedSynths = selectedSynths.filter((synth) => synth !== btn.value);
     }
-  } else {
-    const tritonIndex = selectedSynths.indexOf('triton');
-    const synthName = selectedSynths[tritonIndex];
-    selectedSynths = selectedSynths.filter((synth) => synth !== synthName);
-  }
-  saveState('synths', selectedSynths);
+    saveState('synths', selectedSynths);
+    console.log(selectedSynths);
+  });
 });
-zeroOneSynthBtn.addEventListener('click', (_) => {
-  zeroOneSynthBtn.classList.toggle('btn-active');
-  if (zeroOneSynthBtn.classList.contains('btn-active')) {
-    if (selectedSynths.indexOf('zeroOne') === -1) {
-      selectedSynths.push(zeroOneSynthBtn.value);
-    }
-  } else {
-    const tritonIndex = selectedSynths.indexOf('zeroOne');
-    const synthName = selectedSynths[tritonIndex];
-    selectedSynths = selectedSynths.filter((synth) => synth !== synthName);
-  }
-  saveState('synths', selectedSynths);
-});
+
 function saveState(key, data) {
   const saved = JSON.parse(localStorage.getItem('midi'));
   if (saved) {
