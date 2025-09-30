@@ -13,8 +13,8 @@ const TRITON_TUNNING_DEFAULT = {
   tunningReady2: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
 };
 
-let TRITON_TRANSPOSE_PORTION_TEMP = [0, 0, 0, 0, 0, 0, 0];
-let TRITON_TRANSPOSE_PORTION = [0, 0, 0, 0, 0, 0, 0, 0];
+let TRITON_TRANSPOSE_PORTION_TEMP = [0, 0, 3, 3, 28, 0, 7];
+let TRITON_TRANSPOSE_PORTION = [0, 0, 0, 3, 3, 28, 0, 7];
 
 const TRITON_DEF_GLOB = [
   240, 66, 48, 80, 81, 1, 0, 0, 0, 3, 3, 28, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

@@ -49,13 +49,11 @@ function resetTunningPortions() {
   PA3X_TUNNING_BODY = PA3X_TUNNING_BODY_DEFAULT;
 }
 function updateTritonTransposeGlob(transposeValue) {
+  // Update the global
   const dumpHeader = TRITON_MODF_GLOB.slice(0, 6);
   const dumpTail = TRITON_MODF_GLOB.slice(14);
-
-  TRITON_TRANSPOSE_PORTION_TEMP[1] = transposeValue;
-
+  TRITON_TRANSPOSE_PORTION_TEMP[1] = transposeValue - 64;
   TRITON_TRANSPOSE_PORTION = encode7bitTo8(TRITON_TRANSPOSE_PORTION_TEMP);
-
   TRITON_MODF_GLOB = [...dumpHeader, ...TRITON_TRANSPOSE_PORTION, ...dumpTail];
 }
 
@@ -63,7 +61,7 @@ function updateZeroOneTransposeGlob(transposeValue) {
   const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 6);
   const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(14);
 
-  ZERO_ONE_TRANSPOSE_TEMP[1] = transposeValue;
+  ZERO_ONE_TRANSPOSE_TEMP[1] = transposeValue - 64;
 
   ZERO_ONE_TRANSPOSE = encode7bitTo8(ZERO_ONE_TRANSPOSE_TEMP);
 

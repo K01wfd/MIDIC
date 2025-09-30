@@ -73,20 +73,20 @@ const sender = {
     sendTranspose: function (transposeValue) {
       const convertedValue = '0x' + toHex7bit(transposeValue);
       const msg = [0xf0, 0x7f, 0x00, 0x04, 0x04, 0x00, convertedValue, 0xf7];
-
       trMIDI.sendMessage(msg);
-      updateTritonTransposeGlob(transposeValue - 64);
+      updateTritonTransposeGlob(transposeValue);
     },
 
     sendZeroTranspose() {
+      updateTritonTransposeGlob(64);
       const convertedValue = '0x' + toHex7bit(64);
       const msg = [0xf0, 0x7f, 0x00, 0x04, 0x04, 0x00, convertedValue, 0xf7];
       trMIDI.sendMessage(msg);
-      updateTritonTransposeGlob(0);
     },
 
     resetGlobal: function () {
-      trMIDI.sendMessage(TRITON_DEF_GLOB);
+      this.sendZeroTranspose();
+      setTimeout(() => this.sendZeroTunning(), 50);
     },
   },
   zeroOne: {
@@ -217,31 +217,32 @@ const sender = {
     },
 
     sendZeroTranspose() {
-      updateZeroOneTransposeGlob(0);
+      updateZeroOneTransposeGlob(64);
       const dump = ZERO_ONE_MODF_GLOBAL;
       trMIDI.sendMessage(dump);
     },
 
     sendTranspose(transposeValue) {
-      updateZeroOneTransposeGlob(transposeValue - 64);
+      updateZeroOneTransposeGlob(transposeValue);
       const dump = ZERO_ONE_MODF_GLOBAL;
       trMIDI.sendMessage(dump);
     },
 
     resetGlobal() {
-      trMIDI.sendMessage(ZER_ONE_GLOBAL);
+      this.sendZeroTranspose();
+      setTimeout(() => this.sendZeroTunning(), 50);
     },
   },
 
   pa3x: {
     sendTranspose(transposeValue) {
-      PA3X_TRANSPOSE_ZERO[6] = transposeValue;
-      trMIDI.sendMessage(PA3X_TRANSPOSE_ZERO);
+      PA3X_TRANSPOSE[6] = transposeValue;
+      trMIDI.sendMessage(PA3X_TRANSPOSE);
     },
 
     sendZeroTranspose() {
-      PA3X_TRANSPOSE_ZERO[6] = 64;
-      const msg = PA3X_TRANSPOSE_ZERO;
+      PA3X_TRANSPOSE[6] = 64;
+      const msg = PA3X_TRANSPOSE;
       trMIDI.sendMessage(msg);
     },
 
@@ -325,7 +326,7 @@ const sender = {
 
     sendZeroTunning() {
       resetTunningPortions();
-      trMIDI.sendMessage(PA3X_TUNNING_BODY_DEFAULT);
+      trMIDI.sendMessage(PA3X_TUNNING_BODY);
     },
 
     sendScalePreset(scaleType, tunningValue) {
@@ -380,7 +381,7 @@ const sender = {
     },
     resetGlobal() {
       this.sendZeroTranspose();
-      this.sendZeroTunning();
+      setTimeout(() => this.sendZeroTunning(), 50);
     },
   },
 };
