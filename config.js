@@ -28,7 +28,6 @@ buttons.forEach((btn) => {
       selectedSynths = selectedSynths.filter((synth) => synth !== btn.value);
     }
     saveState('synths', selectedSynths);
-    console.log(selectedSynths);
   });
 });
 
