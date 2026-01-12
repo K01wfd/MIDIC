@@ -1,7 +1,6 @@
 const pa3xSynthBtn = document.getElementById('pa3x');
 const tritonSynthBtn = document.getElementById('triton');
 const zeroOneSynthBtn = document.getElementById('zeroOne');
-const globalResetBtn = document.getElementById('reset-global');
 
 // alert('Please RESET first!');
 let selectedSynths = [];

@@ -1,16 +1,15 @@
 const transposeButtons = document.querySelectorAll('[data-id="transpose-btn"]');
 const transposeValue = document.getElementById('transpose-value');
 const userScaleButtons = document.querySelectorAll('[data-id="userscale-btn"]');
+const cents = document.querySelectorAll('[type="number"]');
 const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-btn"]');
 const resetBtnWrapper = document.getElementById('reset-global-wrapper');
 const resetBtn = document.getElementById('reset-global');
-const clearBtn = document.getElementById('clear');
+// const clearBtn = document.getElementById('clear');
 const message = document.getElementById('message');
-const k01controllerBtn = document.getElementById('k01-controller');
+// const k01controllerBtn = document.getElementById('k01-controller');
 
 let currentTransposeValue = +transposeValue.textContent;
-let tunningValue = -50;
-let resetTimes = 0;
 
 transposeButtons.forEach((btn) => {
   btn.addEventListener('click', (_) => {
@@ -51,7 +50,16 @@ userScaleButtons.forEach((btn) => {
       showMessage('Please Select a model');
       return;
     }
+    let cent = null;
+    cents.forEach((c) => {
+      if (c.name === btn.dataset.key) {
+        cent = c;
+        return;
+      }
+    });
+    const tunningValue = +cent.value;
     btn.classList.toggle('btn-active');
+
     if (!btn.classList.contains('btn-active')) {
       btn.value = 0;
     } else {
@@ -85,10 +93,10 @@ scalePresetsButtons.forEach((btn) => {
 });
 
 resetBtn.addEventListener('click', (_) => {
-  if (resetTimes > 0) {
-    showMessage('Global was recently reseted!');
-    return;
-  }
+  // if (resetTimes > 0) {
+  //   showMessage('Global was recently reseted!');
+  //   return;
+  // }
 
   sender.triton.resetGlobal();
   sender.zeroOne.resetGlobal();
@@ -108,20 +116,21 @@ resetBtn.addEventListener('click', (_) => {
 
   localStorage.removeItem('midi');
   selectedSynths = [];
-  resetTimes++;
+  // resetTimes++;
 });
-clearBtn.addEventListener('click', (_) => {
-  currentTransposeValue = 0;
-  transposeValue.textContent = 0;
 
-  transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
-  userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
-  scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
+// clearBtn.addEventListener('click', (_) => {
+//   currentTransposeValue = 0;
+//   transposeValue.textContent = 0;
 
-  selectedSynths.forEach((synth) => {
-    sender[synth].resetGlobal();
-  });
-});
+//   transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
+//   userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+//   scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
+
+//   selectedSynths.forEach((synth) => {
+//     sender[synth].resetGlobal();
+//   });
+// });
 
 function showMessage(msg) {
   message.textContent = msg;
@@ -136,9 +145,9 @@ function showIcon(targetElement, icon) {
   targetElement.appendChild(iconElement);
 }
 
-k01controllerBtn.addEventListener('click', (_) => {
-  window.location.replace('https://k01wfd.github.io/KORG01WFD_MIDI_CONTROLLER/');
-});
+// k01controllerBtn.addEventListener('click', (_) => {
+//   window.location.replace('https://k01wfd.github.io/KORG01WFD_MIDI_CONTROLLER/');
+// });
 
 document.addEventListener(
   'dblclick',

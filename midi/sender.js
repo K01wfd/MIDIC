@@ -89,6 +89,7 @@ const sender = {
       setTimeout(() => this.sendZeroTunning(), 50);
     },
   },
+
   zeroOne: {
     sendScaleTunning(index, value, portionNum, key = '') {
       let keyIndex = index;

@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <title>MIDI CONTROLLER</title>
@@ -20,41 +19,81 @@
           <li>
             <button id="zeroOne" value="zeroOne">K01/wfd</button>
           </li>
+          <div class="vertical-devider" aria-hidden="true"></div>
           <li>
-            <div id="reset-global-wrapper">
-              <button id="reset-global">Reset</button>
+            <div class="transpose">
+              <!-- <button id="clear">Clear</button> -->
+              <button id="transpose-" data-id="transpose-btn">-</button>
+              <div id="transpose-value">0</div>
+              <button id="transpose+" data-id="transpose-btn">+</button>
             </div>
           </li>
-          <li><button id="k01-controller">K01 Controller</button></li>
+          <div class="vertical-devider" aria-hidden="true"></div>
+          <li>
+            <div id="reset-global-wrapper">
+              <button id="reset-global">Reset all</button>
+            </div>
+          </li>
+          <!-- <li><button id="k01-controller">K01 Controller</button></li> -->
         </menu>
       </nav>
       <main>
-        <div class="transpose">
-          <button id="clear">Clear</button>
-          <button id="transpose-" data-id="transpose-btn">-</button>
-          <div id="transpose-value">0</div>
-          <button id="transpose+" data-id="transpose-btn">+</button>
-        </div>
         <div class="userScale">
           <div class="userScale-top">
             <div class="userScale-top__left">
-              <button data-id="userscale-btn" data-index="2" value="-50" data-portion="1">C#</button>
-              <button data-id="userscale-btn" data-index="4" value="-50" data-portion="1">D#</button>
+              <div class="btn-group">
+                <button data-id="userscale-btn" data-index="2" data-key="c#" data-portion="1">C#</button>
+                <input type="number" name="c#" min="-90" max="90" value="-50" />
+              </div>
+              <div class="btn-group">
+                <button data-id="userscale-btn" data-index="4" data-key="d#" data-portion="1">D#</button>
+                <input type="number" name="d#" min="-90" max="90" value="-50" />
+              </div>
             </div>
             <div class="userScale-top__right">
-              <button data-id="userscale-btn" data-index="0" value="-50" data-portion="2">F#</button>
-              <button data-id="userscale-btn" data-index="2" value="-50" data-portion="2">G#</button>
-              <button data-id="userscale-btn" data-index="4" value="-50" data-portion="2">A#</button>
+              <div class="btn-group">
+                <button data-id="userscale-btn" data-index="0" data-key="f#" data-portion="2">F#</button>
+                <input type="number" name="f#" min="-90" max="90" value="-50" />
+              </div>
+              <div class="btn-group">
+                <button data-id="userscale-btn" data-index="2" data-key="g#" data-portion="2">G#</button>
+                <input type="number" name="g#" min="-90" max="90" value="-50" />
+              </div>
+              <div class="btn-group">
+                <button data-id="userscale-btn" data-index="4" data-key="a#" data-portion="2">A#</button>
+                <input type="number" name="a#" min="-90" max="90" value="-50" />
+              </div>
             </div>
           </div>
           <div class="userScale-bottom">
-            <button data-id="userscale-btn" data-index="1" value="-50" data-portion="1">C</button>
-            <button data-id="userscale-btn" data-index="3" value="-50" data-portion="1">D</button>
-            <button data-id="userscale-btn" data-index="5" value="-50" data-portion="1">E</button>
-            <button data-id="userscale-btn" data-index="6" value="-50" data-portion="1">F</button>
-            <button data-id="userscale-btn" data-index="1" value="-50" data-portion="2">G</button>
-            <button data-id="userscale-btn" data-index="3" value="-50" data-portion="2">A</button>
-            <button data-id="userscale-btn" data-index="5" value="-50" data-portion="2">B</button>
+            <div class="btn-group">
+              <button data-id="userscale-btn" data-index="1" data-key="c" data-portion="1">C</button>
+              <input type="number" name="c" min="-90" max="90" value="-50" />
+            </div>
+            <div class="btn-group">
+              <button data-id="userscale-btn" data-index="3" data-key="d" data-portion="1">D</button>
+              <input type="number" name="d" min="-90" max="90" value="-50" />
+            </div>
+            <div class="btn-group">
+              <button data-id="userscale-btn" data-index="5" data-key="e" data-portion="1">E</button>
+              <input type="number" name="e" min="-90" max="90" value="-50" />
+            </div>
+            <div class="btn-group">
+              <button data-id="userscale-btn" data-index="6" data-key="f" data-portion="1">F</button>
+              <input type="number" name="f" min="-90" max="90" value="-50" />
+            </div>
+            <div class="btn-group">
+              <button data-id="userscale-btn" data-index="1" data-key="g" data-portion="2">G</button>
+              <input type="number" name="g" min="-90" max="90" value="-50" />
+            </div>
+            <div class="btn-group">
+              <button data-id="userscale-btn" data-index="3" data-key="a" data-portion="2">A</button>
+              <input type="number" name="a" min="-90" max="90" value="-50" />
+            </div>
+            <div class="btn-group">
+              <button data-id="userscale-btn" data-index="5" data-key="b" data-portion="2">B</button>
+              <input type="number" name="b" min="-90" max="90" value="-50" />
+            </div>
           </div>
           <div class="scale-presets">
             <button data-id="scale-preset-btn" value="BC">Bayat C</button>
