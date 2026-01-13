@@ -1,4 +1,8 @@
 const sender = {
+  isTranspose: false,
+  whatTranspose: null,
+  transValState: 0,
+
   triton: {
     sendScaleTunning: function (index, value, portionNum) {
       const dumpHeader = TRITON_MODF_GLOB.slice(0, 14);
@@ -148,8 +152,16 @@ const sender = {
       }
       const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
       const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
+
       if (portionNum === 1) {
-        ZERO_ONE_TUNNING.tunningTemp1[keyIndex] = value;
+        let newKeyIndex = null;
+        if (sender.isTranspose && sender.whatTranspose === 'plus') newKeyIndex = keyIndex + sender.transValState;
+        else newKeyIndex = keyIndex;
+        if (newKeyIndex > keyIndex) newKeyIndex = keyIndex;
+        console.log(sender);
+        console.log(newKeyIndex);
+
+        ZERO_ONE_TUNNING.tunningTemp1[newKeyIndex] = value;
         ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
       } else if (portionNum === 2 && key === 'F#') {
         ZERO_ONE_TUNNING.tunningTemp1[keyIndex] = value;
@@ -158,6 +170,7 @@ const sender = {
         ZERO_ONE_TUNNING.tunningTemp2[keyIndex] = value;
         ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
       }
+
       const tunningBody = [...ZERO_ONE_TUNNING.tunningReady1, ...ZERO_ONE_TUNNING.tunningReady2];
       const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
       ZERO_ONE_MODF_GLOBAL = combined;
@@ -221,9 +234,19 @@ const sender = {
       updateZeroOneTransposeGlob(64);
       const dump = ZERO_ONE_MODF_GLOBAL;
       trMIDI.sendMessage(dump);
+      sender.isTranspose = false;
+      sender.whatTranspose = null;
+      sender.transValState = 0;
     },
 
     sendTranspose(transposeValue) {
+      if (transposeValue > 64) sender.whatTranspose = 'plus';
+      else if (transposeValue === 64) sender.whatTranspose = null;
+      else sender.whatTranspose = 'minus';
+      sender.transValState = transposeValue - 64;
+      if (sender.transValState !== 0) sender.isTranspose = true;
+      else sender.isTranspose = false;
+
       updateZeroOneTransposeGlob(transposeValue);
       const dump = ZERO_ONE_MODF_GLOBAL;
       trMIDI.sendMessage(dump);

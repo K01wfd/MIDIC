@@ -11,6 +11,7 @@ const message = document.getElementById('message');
 
 const globalState = {
   isScalePreset: false,
+  isScaleTunning: false,
 };
 
 let currentTransposeValue = +transposeValue.textContent;
@@ -21,8 +22,15 @@ transposeButtons.forEach((btn) => {
       showMessage('Please Select a model');
       return;
     }
-    const btnType = btn.id === 'transpose+' ? '+' : '-';
+    if (globalState.isScalePreset || globalState.isScaleTunning) {
+      selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
+      userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+      scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
+      globalState.isScalePreset = false;
+      globalState.isScaleTunning = false;
+    }
 
+    const btnType = btn.id === 'transpose+' ? '+' : '-';
     if (btnType === '+' && currentTransposeValue < 12) {
       currentTransposeValue++;
       transposeValue.textContent = currentTransposeValue.toString();
@@ -32,7 +40,10 @@ transposeButtons.forEach((btn) => {
       transposeValue.textContent = currentTransposeValue.toString();
       if (currentTransposeValue < 0) btn.classList.add('btn-active');
     }
-    selectedSynths.forEach((synth) => sender[synth].sendTranspose(currentTransposeValue + 64));
+
+    setTimeout(() => {
+      selectedSynths.forEach((synth) => sender[synth].sendTranspose(currentTransposeValue + 64));
+    }, 100);
     if (currentTransposeValue === 0) transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
   });
 });
@@ -45,8 +56,14 @@ transposeValue.addEventListener('click', (_) => {
   if (currentTransposeValue === 0) return;
   transposeValue.textContent = '0';
   currentTransposeValue = 0;
-  selectedSynths.forEach((synth) => sender[synth].sendZeroTranspose());
+  selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
+
   transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
+  setTimeout(() => {
+    selectedSynths.forEach((synth) => sender[synth].sendZeroTranspose());
+  }, 100);
 });
 
 userScaleButtons.forEach((btn) => {
@@ -74,8 +91,10 @@ userScaleButtons.forEach((btn) => {
     btn.classList.toggle('btn-active');
     if (!btn.classList.contains('btn-active')) {
       btn.value = 0;
+      globalState.isScaleTunning = false;
     } else {
       btn.value = tunningValue;
+      globalState.isScaleTunning = true;
     }
 
     const btnValue = +btn.value;
@@ -87,6 +106,10 @@ userScaleButtons.forEach((btn) => {
 
 scalePresetsButtons.forEach((btn) => {
   btn.addEventListener('click', (_) => {
+    if (sender.isTranspose) {
+      showMessage('Transpose on');
+      return;
+    }
     if (selectedSynths.length === 0) {
       showMessage('Please Select a model');
       return;
@@ -108,11 +131,6 @@ scalePresetsButtons.forEach((btn) => {
 });
 
 resetBtn.addEventListener('click', (_) => {
-  // if (resetTimes > 0) {
-  //   showMessage('Global was recently reseted!');
-  //   return;
-  // }
-
   sender.triton.resetGlobal();
   sender.zeroOne.resetGlobal();
   sender.pa3x.resetGlobal();
@@ -127,35 +145,11 @@ resetBtn.addEventListener('click', (_) => {
   showMessage('Clear');
 });
 
-// clearBtn.addEventListener('click', (_) => {
-//   currentTransposeValue = 0;
-//   transposeValue.textContent = 0;
-
-//   transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
-//   userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
-//   scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
-
-//   selectedSynths.forEach((synth) => {
-//     sender[synth].resetGlobal();
-//   });
-// });
-
 function showMessage(msg) {
   message.textContent = msg;
   message.style.display = 'block';
   setTimeout(() => (message.style.display = 'none'), 4000);
 }
-
-function showIcon(targetElement, icon) {
-  const iconElement = document.createElement('span');
-  iconElement.innerHTML = icon;
-  iconElement.classList.add('icon');
-  targetElement.appendChild(iconElement);
-}
-
-// k01controllerBtn.addEventListener('click', (_) => {
-//   window.location.replace('https://k01wfd.github.io/KORG01WFD_MIDI_CONTROLLER/');
-// });
 
 document.addEventListener(
   'dblclick',
