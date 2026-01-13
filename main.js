@@ -3,7 +3,6 @@ const transposeValue = document.getElementById('transpose-value');
 
 const userScaleButtons = document.querySelectorAll('[data-id="userscale-btn"]');
 const cents = document.querySelectorAll('[type="number"]');
-const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-btn"]');
 
 const resetBtnWrapper = document.getElementById('reset-global-wrapper');
 const resetBtn = document.getElementById('reset-global');
