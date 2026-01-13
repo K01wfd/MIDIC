@@ -174,7 +174,7 @@ const sender = {
       trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
     },
 
-    sendScalePreset(scaleType, tunningValue) {
+    sendScalePreset(scaleType, tunningValue = -50) {
       ZERO_ONE_TUNNING = JSON.parse(JSON.stringify(ZERO_ONE_TUNNING_DEFAULT));
       const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
       const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
@@ -249,59 +249,7 @@ const sender = {
 
     sendScaleTunning(index, value, portionNum, key = '') {
       let keyIndex = index;
-      switch (key) {
-        case 'C': {
-          keyIndex = 2;
-          break;
-        }
-        case 'C#': {
-          keyIndex = 3;
-          break;
-        }
-        case 'D': {
-          keyIndex = 4;
-          break;
-        }
-        case 'D#': {
-          keyIndex = 5;
-          break;
-        }
-        case 'E': {
-          keyIndex = 6;
-          break;
-        }
-        case 'F': {
-          keyIndex = 0;
-          break;
-        }
-        case 'F#': {
-          keyIndex = 1;
-          break;
-        }
-        case 'G': {
-          keyIndex = 2;
-          break;
-        }
-        case 'G#': {
-          keyIndex = 3;
-          break;
-        }
-        case 'A': {
-          keyIndex = 4;
-          break;
-        }
-        case 'A#': {
-          keyIndex = 5;
-          break;
-        }
-        case 'B': {
-          keyIndex = 6;
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+      replaceIndex(key, keyIndex);
       const dumpHeader = PA3X_TUNNING_BODY.slice(0, 6);
       const dumpTail = PA3X_TUNNING_BODY.slice(-1);
 

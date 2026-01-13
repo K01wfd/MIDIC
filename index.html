@@ -8,35 +8,37 @@
   </head>
   <body>
     <div id="app">
-      <nav>
-        <menu>
-          <li>
-            <button id="pa3x" value="pa3x">PA3X</button>
-          </li>
-          <li>
-            <button id="triton" value="triton">Triton</button>
-          </li>
-          <li>
-            <button id="zeroOne" value="zeroOne">K01/wfd</button>
-          </li>
-          <div class="vertical-devider" aria-hidden="true"></div>
-          <li>
-            <div class="transpose">
-              <!-- <button id="clear">Clear</button> -->
-              <button id="transpose-" data-id="transpose-btn">-</button>
-              <div id="transpose-value">0</div>
-              <button id="transpose+" data-id="transpose-btn">+</button>
-            </div>
-          </li>
-          <div class="vertical-devider" aria-hidden="true"></div>
-          <li>
-            <div id="reset-global-wrapper">
-              <button id="reset-global">Reset all</button>
-            </div>
-          </li>
-          <!-- <li><button id="k01-controller">K01 Controller</button></li> -->
-        </menu>
-      </nav>
+      <header>
+        <nav>
+          <menu>
+            <li>
+              <button id="pa3x" value="pa3x">PA3X</button>
+            </li>
+            <li>
+              <button id="triton" value="triton">Triton</button>
+            </li>
+            <li>
+              <button id="zeroOne" value="zeroOne">K01/wfd</button>
+            </li>
+            <div class="vertical-devider" aria-hidden="true"></div>
+            <li>
+              <div class="transpose">
+                <!-- <button id="clear">Clear</button> -->
+                <button id="transpose-" data-id="transpose-btn">-</button>
+                <div id="transpose-value">0</div>
+                <button id="transpose+" data-id="transpose-btn">+</button>
+              </div>
+            </li>
+            <div class="vertical-devider" aria-hidden="true"></div>
+            <li>
+              <div id="reset-global-wrapper">
+                <button id="reset-global">Reset all</button>
+              </div>
+            </li>
+            <!-- <li><button id="k01-controller">K01 Controller</button></li> -->
+          </menu>
+        </nav>
+      </header>
       <main>
         <div class="userScale">
           <div class="userScale-top">
@@ -100,12 +102,6 @@
             <button data-id="scale-preset-btn" value="BD">Bayat D</button>
             <button data-id="scale-preset-btn" value="BG">Bayat G</button>
             <button data-id="scale-preset-btn" value="BA">Bayat A</button>
-          </div>
-        </div>
-        <div class="settings" style="display: none">
-          <div class="tunning-range">
-            <input type="range" id="tunning-range" min="-99" max="99" value="-50" step="1" />
-            <span id="tunning-range-value">-50</span>
           </div>
         </div>
         <div id="message" style="display: none"></div>

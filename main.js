@@ -1,13 +1,17 @@
 const transposeButtons = document.querySelectorAll('[data-id="transpose-btn"]');
 const transposeValue = document.getElementById('transpose-value');
+
 const userScaleButtons = document.querySelectorAll('[data-id="userscale-btn"]');
 const cents = document.querySelectorAll('[type="number"]');
 const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-btn"]');
+
 const resetBtnWrapper = document.getElementById('reset-global-wrapper');
 const resetBtn = document.getElementById('reset-global');
-// const clearBtn = document.getElementById('clear');
 const message = document.getElementById('message');
-// const k01controllerBtn = document.getElementById('k01-controller');
+
+const globalState = {
+  isScalePreset: false,
+};
 
 let currentTransposeValue = +transposeValue.textContent;
 
@@ -38,6 +42,7 @@ transposeValue.addEventListener('click', (_) => {
     showMessage('Please Select a model');
     return;
   }
+  if (currentTransposeValue === 0) return;
   transposeValue.textContent = '0';
   currentTransposeValue = 0;
   selectedSynths.forEach((synth) => sender[synth].sendZeroTranspose());
@@ -50,6 +55,13 @@ userScaleButtons.forEach((btn) => {
       showMessage('Please Select a model');
       return;
     }
+
+    if (globalState.isScalePreset) {
+      resetTunningPortions();
+      scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
+      globalState.isScalePreset = false;
+    }
+
     let cent = null;
     cents.forEach((c) => {
       if (c.name === btn.dataset.key) {
@@ -58,13 +70,14 @@ userScaleButtons.forEach((btn) => {
       }
     });
     const tunningValue = +cent.value;
-    btn.classList.toggle('btn-active');
 
+    btn.classList.toggle('btn-active');
     if (!btn.classList.contains('btn-active')) {
       btn.value = 0;
     } else {
       btn.value = tunningValue;
     }
+
     const btnValue = +btn.value;
     const btnIndex = +btn.dataset.index;
     const btnPortion = +btn.dataset.portion;
@@ -83,10 +96,12 @@ scalePresetsButtons.forEach((btn) => {
     if (!btn.classList.contains('btn-active')) {
       scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
       btn.classList.add('btn-active');
-      selectedSynths.forEach((synth) => sender[synth].sendScalePreset(scaleType, tunningValue));
+      globalState.isScalePreset = true;
+      selectedSynths.forEach((synth) => sender[synth].sendScalePreset(scaleType));
     } else {
       btn.classList.remove('btn-active');
       userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+      globalState.isScalePreset = false;
       selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
     }
   });
@@ -108,15 +123,8 @@ resetBtn.addEventListener('click', (_) => {
   transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
   userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
   scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
-  tritonSynthBtn.classList.remove('btn-active');
-  zeroOneSynthBtn.classList.remove('btn-active');
-  pa3xSynthBtn.classList.remove('btn-active');
 
-  showIcon(resetBtnWrapper, '✅');
-
-  localStorage.removeItem('midi');
-  selectedSynths = [];
-  // resetTimes++;
+  showMessage('Clear');
 });
 
 // clearBtn.addEventListener('click', (_) => {
