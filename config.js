@@ -1,6 +1,7 @@
 const pa3xSynthBtn = document.getElementById('pa3x');
 const tritonSynthBtn = document.getElementById('triton');
 const zeroOneSynthBtn = document.getElementById('zeroOne');
+const colorRange = document.getElementById('colorRange');
 
 // alert('Please RESET first!');
 let selectedSynths = [];
@@ -40,3 +41,20 @@ function saveState(key, data) {
     localStorage.setItem('midi', JSON.stringify(state));
   }
 }
+
+// Get current css primary color
+const style = window.getComputedStyle(document.body);
+const value = style.getPropertyValue('--color-primary');
+const cssHue = Number(value.slice(4, 7));
+
+colorRange.value = cssHue;
+const colorMin = colorRange.min;
+const colorMax = colorRange.max;
+
+colorRange.addEventListener('input', (e) => {
+  const percent = (e.target.value - colorMin) / (colorMax - colorMin);
+  const hue = Math.round(percent * 360);
+
+  document.documentElement.style.setProperty('--color-primary', `hsl(${hue}, 100%, 35%)`);
+  document.documentElement.style.setProperty('--shadow-color', `hsla(${hue}, 100%, 35%, 0.5)`);
+});
