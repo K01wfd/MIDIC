@@ -62,8 +62,25 @@ function updateZeroOneTransposeGlob(transposeValue) {
   const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(14);
 
   ZERO_ONE_TRANSPOSE_TEMP[1] = transposeValue - 64;
-
   ZERO_ONE_TRANSPOSE = encode7bitTo8(ZERO_ONE_TRANSPOSE_TEMP);
-
   ZERO_ONE_MODF_GLOBAL = [...dumpHeader, ...ZERO_ONE_TRANSPOSE, ...dumpTail];
+}
+
+function zeroOnePresetTunning(keyIndex1, keyIndex2, portions = '') {
+  if (portions === 'first') {
+    ZERO_ONE_TUNNING.tunningTemp1[keyIndex1] = -50;
+    ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
+    ZERO_ONE_TUNNING.tunningTemp1[keyIndex2] = -50;
+    ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
+  } else if (portions === 'second') {
+    ZERO_ONE_TUNNING.tunningTemp2[keyIndex1] = -50;
+    ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
+    ZERO_ONE_TUNNING.tunningTemp2[keyIndex2] = -50;
+    ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
+  } else {
+    ZERO_ONE_TUNNING.tunningTemp1[keyIndex1] = -50;
+    ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
+    ZERO_ONE_TUNNING.tunningTemp2[keyIndex2] = -50;
+    ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
+  }
 }

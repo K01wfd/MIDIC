@@ -187,38 +187,86 @@ const sender = {
       trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
     },
 
-    sendScalePreset(scaleType, tunningValue = -50) {
+    sendScalePreset(scaleType) {
       ZERO_ONE_TUNNING = JSON.parse(JSON.stringify(ZERO_ONE_TUNNING_DEFAULT));
       const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
       const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
-
       switch (scaleType) {
         case 'BC': {
-          ZERO_ONE_TUNNING.tunningTemp1[2] = tunningValue;
-          ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
-          ZERO_ONE_TUNNING.tunningTemp2[2] = tunningValue;
-          ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
+          zeroOnePresetTunning(2, 2);
+          break;
+        }
+        case 'BC#': {
+          zeroOnePresetTunning(3, 3);
           break;
         }
         case 'BD': {
-          ZERO_ONE_TUNNING.tunningTemp1[4] = tunningValue;
-          ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
-          ZERO_ONE_TUNNING.tunningTemp2[4] = tunningValue;
-          ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
+          zeroOnePresetTunning(4, 4);
           break;
         }
+        case 'BD#': {
+          zeroOnePresetTunning(5, 0, 'first');
+          break;
+        }
+        case 'BE': {
+          zeroOnePresetTunning(6, 1, 'first');
+          break;
+        }
+        case 'BF': {
+          zeroOnePresetTunning(2, 0);
+          break;
+        }
+        case 'BF#': {
+          zeroOnePresetTunning(3, 1);
+          break;
+        }
+
         case 'BG': {
-          ZERO_ONE_TUNNING.tunningTemp1[4] = tunningValue;
-          ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
-          ZERO_ONE_TUNNING.tunningTemp2[2] = tunningValue;
-          ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
+          zeroOnePresetTunning(4, 2);
+          break;
+        }
+        case 'BG#': {
+          zeroOnePresetTunning(5, 3);
           break;
         }
         case 'BA': {
-          ZERO_ONE_TUNNING.tunningTemp1[6] = tunningValue;
-          ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
-          ZERO_ONE_TUNNING.tunningTemp2[4] = tunningValue;
-          ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
+          zeroOnePresetTunning(6, 4);
+          break;
+        }
+        case 'BA#': {
+          zeroOnePresetTunning(0, 0);
+          break;
+        }
+        case 'BB': {
+          zeroOnePresetTunning(1, 1);
+          break;
+        }
+        case 'RC': {
+          zeroOnePresetTunning(4, 4);
+          break;
+        }
+        case 'RD': {
+          zeroOnePresetTunning(6, 1, 'first');
+          break;
+        }
+        case 'RE': {
+          zeroOnePresetTunning(3, 1);
+          break;
+        }
+        case 'RF': {
+          zeroOnePresetTunning(4, 2);
+          break;
+        }
+        case 'RG': {
+          zeroOnePresetTunning(6, 4);
+          break;
+        }
+        case 'RA': {
+          zeroOnePresetTunning(1, 1);
+          break;
+        }
+        case 'RB': {
+          zeroOnePresetTunning(3, 3);
           break;
         }
         default:
