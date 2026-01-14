@@ -3,14 +3,18 @@ const transposeValue = document.getElementById('transpose-value');
 
 const userScaleButtons = document.querySelectorAll('[data-id="userscale-btn"]');
 const cents = document.querySelectorAll('[type="number"]');
+const centValueRange = document.getElementById('cent-range-value');
+const centRange = document.getElementById('centRange');
 
 const resetBtnWrapper = document.getElementById('reset-global-wrapper');
 const resetBtn = document.getElementById('reset-global');
+const disableTunningBtn = document.getElementById('disable-tunning');
 const message = document.getElementById('message');
 
 const globalState = {
   isScalePreset: false,
   isScaleTunning: false,
+  isTunningDisabled: false,
 };
 
 let currentTransposeValue = +transposeValue.textContent;
@@ -99,7 +103,9 @@ userScaleButtons.forEach((btn) => {
     const btnValue = +btn.value;
     const btnIndex = +btn.dataset.index;
     const btnPortion = +btn.dataset.portion;
-    selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnIndex, btnValue, btnPortion, btn.textContent));
+    if (!globalState.isTunningDisabled) {
+      selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnIndex, btnValue, btnPortion, btn.textContent));
+    }
   });
 });
 
@@ -141,11 +147,39 @@ resetBtn.addEventListener('click', (_) => {
   userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
   scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
 
-  showMessage('Clear');
+  showMessage(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>'
+  );
 });
 
+disableTunningBtn.addEventListener('click', (e) => {
+  disableTunningBtn.classList.toggle('btn-active');
+  if (disableTunningBtn.classList.contains('btn-active')) {
+    globalState.isTunningDisabled = true;
+    userScaleButtons.forEach((btn) => btn.classList.add('btn-disabled'));
+  } else {
+    globalState.isTunningDisabled = false;
+    userScaleButtons.forEach((btn) => {
+      if (btn.classList.contains('btn-active')) {
+        const adjCentElem = btn.nextElementSibling;
+        adjCentElem.value = centValueRange.textContent;
+      }
+      btn.classList.remove('btn-active');
+      btn.classList.remove('btn-disabled');
+    });
+  }
+});
+
+centRange.addEventListener('input', (e) => {
+  if (!globalState.isTunningDisabled) {
+    alert('please disable tunning first');
+    centRange.value = -50;
+  }
+  const centVal = Math.floor(parseFloat(e.target.value)).toFixed();
+  centValueRange.textContent = centVal;
+});
 function showMessage(msg) {
-  message.textContent = msg;
+  message.innerHTML = msg;
   message.style.display = 'block';
   setTimeout(() => (message.style.display = 'none'), 4000);
 }

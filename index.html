@@ -10,7 +10,7 @@
     <div id="app">
       <header>
         <nav>
-          <menu>
+          <menu class="main-menu">
             <li>
               <button id="pa3x" value="pa3x">PA3X</button>
             </li>
@@ -20,24 +20,99 @@
             <li>
               <button id="zeroOne" value="zeroOne">K01/wfd</button>
             </li>
-            <div class="vertical-devider" aria-hidden="true"></div>
             <li>
               <div class="transpose">
-                <!-- <button id="clear">Clear</button> -->
                 <button id="transpose-" data-id="transpose-btn">-</button>
                 <div id="transpose-value">0</div>
                 <button id="transpose+" data-id="transpose-btn">+</button>
               </div>
             </li>
-            <div class="vertical-devider" aria-hidden="true"></div>
+          </menu>
+          <menu class="control-menu">
             <li>
-              <div id="reset-global-wrapper">
-                <button id="reset-global">Reset all</button>
+              <div id="icon-buttons">
+                <button id="reset-global">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--icon-fill)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-restore"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3.06 13a9 9 0 1 0 .49 -4.087" />
+                    <path d="M3 4.001v5h5" />
+                    <path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                  </svg>
+                </button>
+                <button id="disable-tunning">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--icon-fill)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-keyboard-off"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M18 18h-14a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2h2m4 0h10a2 2 0 0 1 2 2v8c0 .554 -.226 1.056 -.59 1.418"
+                    />
+                    <path d="M6 10l0 .01" />
+                    <path d="M10 10l0 .01" />
+                    <path d="M14 10l0 .01" />
+                    <path d="M18 10l0 .01" />
+                    <path d="M6 14l0 .01" />
+                    <path d="M18 14l0 .01" />
+                    <path d="M10 14l4 0" />
+                    <path d="M3 3l18 18" />
+                  </svg>
+                </button>
               </div>
             </li>
-            <!-- <li><button id="k01-controller">K01 Controller</button></li> -->
+            <li>
+              <div class="sliders">
+                <div class="color-range-wrapper">
+                  <input
+                    type="range"
+                    name="colorRange"
+                    id="colorRange"
+                    min="0"
+                    max="359"
+                    step="1"
+                    class="color-range"
+                    value="0"
+                  />
+                  <div id="color-range-value"></div>
+                </div>
+
+                <div class="cent-range-wrapper">
+                  <input
+                    type="range"
+                    name="centRange"
+                    id="centRange"
+                    min="-99"
+                    max="99"
+                    step="0.5"
+                    class="cent-range"
+                    value="-50"
+                  />
+                  <div class="cent-range-value-wrapper">
+                    <span id="cent-range-value">-50</span>
+                  </div>
+                </div>
+              </div>
+            </li>
           </menu>
-          <input type="range" name="colorRange" id="colorRange" min="0" max="359" step="1" class="color-range" value="0" />
         </nav>
       </header>
       <main>
@@ -46,56 +121,56 @@
             <div class="userScale-top__left">
               <div class="btn-group">
                 <button data-id="userscale-btn" data-index="2" data-key="c#" data-portion="1">C#</button>
-                <input type="number" name="c#" min="-90" max="90" value="-50" />
+                <input type="number" name="c#" min="-90" max="90" value="-50" disabled="true" />
               </div>
               <div class="btn-group">
                 <button data-id="userscale-btn" data-index="4" data-key="d#" data-portion="1">D#</button>
-                <input type="number" name="d#" min="-90" max="90" value="-50" />
+                <input type="number" name="d#" min="-90" max="90" value="-50" disabled="true" />
               </div>
             </div>
             <div class="userScale-top__right">
               <div class="btn-group">
                 <button data-id="userscale-btn" data-index="0" data-key="f#" data-portion="2">F#</button>
-                <input type="number" name="f#" min="-90" max="90" value="-50" />
+                <input type="number" name="f#" min="-90" max="90" value="-50" disabled="true" />
               </div>
               <div class="btn-group">
                 <button data-id="userscale-btn" data-index="2" data-key="g#" data-portion="2">G#</button>
-                <input type="number" name="g#" min="-90" max="90" value="-50" />
+                <input type="number" name="g#" min="-90" max="90" value="-50" disabled="true" />
               </div>
               <div class="btn-group">
                 <button data-id="userscale-btn" data-index="4" data-key="a#" data-portion="2">A#</button>
-                <input type="number" name="a#" min="-90" max="90" value="-50" />
+                <input type="number" name="a#" min="-90" max="90" value="-50" disabled="true" />
               </div>
             </div>
           </div>
           <div class="userScale-bottom">
             <div class="btn-group">
               <button data-id="userscale-btn" data-index="1" data-key="c" data-portion="1">C</button>
-              <input type="number" name="c" min="-90" max="90" value="-50" />
+              <input type="number" name="c" min="-90" max="90" value="-50" disabled="true" />
             </div>
             <div class="btn-group">
               <button data-id="userscale-btn" data-index="3" data-key="d" data-portion="1">D</button>
-              <input type="number" name="d" min="-90" max="90" value="-50" />
+              <input type="number" name="d" min="-90" max="90" value="-50" disabled="true" />
             </div>
             <div class="btn-group">
               <button data-id="userscale-btn" data-index="5" data-key="e" data-portion="1">E</button>
-              <input type="number" name="e" min="-90" max="90" value="-50" />
+              <input type="number" name="e" min="-90" max="90" value="-50" disabled="true" />
             </div>
             <div class="btn-group">
               <button data-id="userscale-btn" data-index="6" data-key="f" data-portion="1">F</button>
-              <input type="number" name="f" min="-90" max="90" value="-50" />
+              <input type="number" name="f" min="-90" max="90" value="-50" disabled="true" />
             </div>
             <div class="btn-group">
               <button data-id="userscale-btn" data-index="1" data-key="g" data-portion="2">G</button>
-              <input type="number" name="g" min="-90" max="90" value="-50" />
+              <input type="number" name="g" min="-90" max="90" value="-50" disabled="true" />
             </div>
             <div class="btn-group">
               <button data-id="userscale-btn" data-index="3" data-key="a" data-portion="2">A</button>
-              <input type="number" name="a" min="-90" max="90" value="-50" />
+              <input type="number" name="a" min="-90" max="90" value="-50" disabled="true" />
             </div>
             <div class="btn-group">
               <button data-id="userscale-btn" data-index="5" data-key="b" data-portion="2">B</button>
-              <input type="number" name="b" min="-90" max="90" value="-50" />
+              <input type="number" name="b" min="-90" max="90" value="-50" disabled="true" />
             </div>
           </div>
           <div class="scale-presets">
