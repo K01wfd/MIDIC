@@ -7,7 +7,7 @@ let PA3X_TUNNING = {
 
 const PA3X_TUNNING_DEFAULT = {
   tunningTemp1: [0, 0, 0, 0, 0, 0, 0],
-  tunningReady1: [0, 0, 0, 0, 0, 0, 0, 0],
+  tunningReady1: [0, 125, 0, 0, 0, 0, 0, 0],
   tunningTemp2: [0, 0, 0, 0, 0, 0, 0],
   tunningReady2: [0, 0, 0, 0, 0, 0, 0, 0],
 };

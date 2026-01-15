@@ -2,7 +2,14 @@ const sender = {
   isTranspose: false,
   whatTranspose: null,
   transValState: 0,
-
+  toggleTranspose: function (transposeValue) {
+    if (transposeValue > 64) sender.whatTranspose = 'plus';
+    else if (transposeValue === 64) sender.whatTranspose = null;
+    else sender.whatTranspose = 'minus';
+    sender.transValState = transposeValue - 64;
+    if (sender.transValState !== 0) sender.isTranspose = true;
+    else sender.isTranspose = false;
+  },
   triton: {
     sendScaleTunning: function (index, value, portionNum) {
       const dumpHeader = TRITON_MODF_GLOB.slice(0, 14);
@@ -158,8 +165,6 @@ const sender = {
         if (sender.isTranspose && sender.whatTranspose === 'plus') newKeyIndex = keyIndex + sender.transValState;
         else newKeyIndex = keyIndex;
         if (newKeyIndex > keyIndex) newKeyIndex = keyIndex;
-        console.log(sender);
-        console.log(newKeyIndex);
 
         ZERO_ONE_TUNNING.tunningTemp1[newKeyIndex] = value;
         ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
@@ -288,26 +293,21 @@ const sender = {
     },
 
     sendTranspose(transposeValue) {
-      if (transposeValue > 64) sender.whatTranspose = 'plus';
-      else if (transposeValue === 64) sender.whatTranspose = null;
-      else sender.whatTranspose = 'minus';
-      sender.transValState = transposeValue - 64;
-      if (sender.transValState !== 0) sender.isTranspose = true;
-      else sender.isTranspose = false;
-
+      sender.toggleTranspose(transposeValue);
       updateZeroOneTransposeGlob(transposeValue);
       const dump = ZERO_ONE_MODF_GLOBAL;
       trMIDI.sendMessage(dump);
     },
 
     resetGlobal() {
-      this.sendZeroTranspose();
-      setTimeout(() => this.sendZeroTunning(), 50);
+      ZERO_ONE_MODF_GLOBAL = JSON.parse(JSON.stringify(ZERO_ONE_GLOBAL));
+      trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
     },
   },
 
   pa3x: {
     sendTranspose(transposeValue) {
+      sender.toggleTranspose(transposeValue);
       PA3X_TRANSPOSE[6] = transposeValue;
       trMIDI.sendMessage(PA3X_TRANSPOSE);
     },
@@ -320,16 +320,67 @@ const sender = {
 
     sendScaleTunning(index, value, portionNum, key = '') {
       let keyIndex = index;
-      replaceIndex(key, keyIndex);
       const dumpHeader = PA3X_TUNNING_BODY.slice(0, 6);
       const dumpTail = PA3X_TUNNING_BODY.slice(-1);
 
+      switch (key) {
+        case 'C': {
+          keyIndex = 2;
+          break;
+        }
+        case 'C#': {
+          keyIndex = 3;
+          break;
+        }
+        case 'D': {
+          keyIndex = 4;
+          break;
+        }
+        case 'D#': {
+          keyIndex = 5;
+          break;
+        }
+        case 'E': {
+          keyIndex = 6;
+          break;
+        }
+        case 'F': {
+          keyIndex = 0;
+          break;
+        }
+        case 'F#': {
+          keyIndex = 1;
+          break;
+        }
+        case 'G': {
+          keyIndex = 2;
+          break;
+        }
+        case 'G#': {
+          keyIndex = 3;
+          break;
+        }
+        case 'A': {
+          keyIndex = 4;
+          break;
+        }
+        case 'A#': {
+          keyIndex = 5;
+          break;
+        }
+        case 'B': {
+          keyIndex = 6;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
       if (portionNum === 1 && key !== 'F') {
         PA3X_TUNNING.tunningTemp1[keyIndex] = value;
         PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
         PA3X_TUNNING.tunningReady1[1] = 125;
       } else if (portionNum === 1 && key === 'F') {
-        console.log('condition met');
         PA3X_TUNNING.tunningTemp2[keyIndex] = value;
         PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
         PA3X_TUNNING.tunningReady1[1] = 125;
@@ -349,7 +400,7 @@ const sender = {
       trMIDI.sendMessage(PA3X_TUNNING_BODY);
     },
 
-    sendScalePreset(scaleType, tunningValue) {
+    sendScalePreset(scaleType, tunningValue = -50) {
       PA3X_TUNNING = JSON.parse(JSON.stringify(PA3X_TUNNING_DEFAULT));
       const dumpHeader = PA3X_TUNNING_BODY.slice(0, 6);
       const dumpTail = PA3X_TUNNING_BODY.slice(-1);
@@ -399,6 +450,7 @@ const sender = {
       PA3X_TUNNING_BODY = combined;
       trMIDI.sendMessage(PA3X_TUNNING_BODY);
     },
+
     resetGlobal() {
       this.sendZeroTranspose();
       setTimeout(() => this.sendZeroTunning(), 50);

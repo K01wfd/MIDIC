@@ -84,3 +84,4 @@ function zeroOnePresetTunning(keyIndex1, keyIndex2, portions = '') {
     ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
   }
 }
+function pa3xPresetsTunning(keyIndex1, keyIndex2) {}

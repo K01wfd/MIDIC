@@ -178,6 +178,7 @@ centRange.addEventListener('input', (e) => {
   const centVal = Math.floor(parseFloat(e.target.value)).toFixed();
   centValueRange.textContent = centVal;
 });
+
 function showMessage(msg) {
   message.innerHTML = msg;
   message.style.display = 'block';
