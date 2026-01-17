@@ -2,6 +2,7 @@ const sender = {
   isTranspose: false,
   whatTranspose: null,
   transValState: 0,
+
   toggleTranspose: function (transposeValue) {
     if (transposeValue > 64) sender.whatTranspose = 'plus';
     else if (transposeValue === 64) sender.whatTranspose = null;
@@ -10,6 +11,7 @@ const sender = {
     if (sender.transValState !== 0) sender.isTranspose = true;
     else sender.isTranspose = false;
   },
+
   triton: {
     sendScaleTunning: function (index, value, portionNum) {
       const dumpHeader = TRITON_MODF_GLOB.slice(0, 14);
@@ -102,61 +104,8 @@ const sender = {
   },
 
   zeroOne: {
-    sendScaleTunning(index, value, portionNum, key = '') {
-      let keyIndex = index;
-      switch (key) {
-        case 'C': {
-          keyIndex = 0;
-          break;
-        }
-        case 'C#': {
-          keyIndex = 1;
-          break;
-        }
-        case 'D': {
-          keyIndex = 2;
-          break;
-        }
-        case 'D#': {
-          keyIndex = 3;
-          break;
-        }
-        case 'E': {
-          keyIndex = 4;
-          break;
-        }
-        case 'F': {
-          keyIndex = 5;
-          break;
-        }
-        case 'F#': {
-          keyIndex = 6;
-          break;
-        }
-        case 'G': {
-          keyIndex = 0;
-          break;
-        }
-        case 'G#': {
-          keyIndex = 1;
-          break;
-        }
-        case 'A': {
-          keyIndex = 2;
-          break;
-        }
-        case 'A#': {
-          keyIndex = 3;
-          break;
-        }
-        case 'B': {
-          keyIndex = 4;
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+    sendScaleTunning(value, portionNum, key = '') {
+      let keyIndex = switchKeyIndex(key, 'zeroOne');
       const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
       const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
 
@@ -179,6 +128,7 @@ const sender = {
       const tunningBody = [...ZERO_ONE_TUNNING.tunningReady1, ...ZERO_ONE_TUNNING.tunningReady2];
       const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
       ZERO_ONE_MODF_GLOBAL = combined;
+
       trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
     },
 
@@ -379,16 +329,14 @@ const sender = {
       if (portionNum === 1 && key !== 'F') {
         PA3X_TUNNING.tunningTemp1[keyIndex] = value;
         PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
-        PA3X_TUNNING.tunningReady1[1] = 125;
       } else if (portionNum === 1 && key === 'F') {
         PA3X_TUNNING.tunningTemp2[keyIndex] = value;
         PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
-        PA3X_TUNNING.tunningReady1[1] = 125;
       } else {
         PA3X_TUNNING.tunningTemp2[keyIndex] = value;
         PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
-        PA3X_TUNNING.tunningReady1[1] = 125;
       }
+      PA3X_TUNNING.tunningReady1[1] = 125;
       const tunningBody = [...PA3X_TUNNING.tunningReady1, ...PA3X_TUNNING.tunningReady2];
       const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
       PA3X_TUNNING_BODY = combined;

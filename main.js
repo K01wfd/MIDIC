@@ -101,10 +101,10 @@ userScaleButtons.forEach((btn) => {
     }
 
     const btnValue = +btn.value;
-    const btnIndex = +btn.dataset.index;
     const btnPortion = +btn.dataset.portion;
+    const key = btn.dataset.key;
     if (!globalState.isTunningDisabled) {
-      selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnIndex, btnValue, btnPortion, btn.textContent));
+      selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnValue, btnPortion, key));
     }
   });
 });

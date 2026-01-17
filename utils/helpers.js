@@ -48,10 +48,12 @@ function resetTunningPortions() {
   PA3X_TUNNING = JSON.parse(JSON.stringify(PA3X_TUNNING_DEFAULT));
   PA3X_TUNNING_BODY = PA3X_TUNNING_BODY_DEFAULT;
 }
+
 function updateTritonTransposeGlob(transposeValue) {
   // Update the global
   const dumpHeader = TRITON_MODF_GLOB.slice(0, 6);
   const dumpTail = TRITON_MODF_GLOB.slice(14);
+
   TRITON_TRANSPOSE_PORTION_TEMP[1] = transposeValue - 64;
   TRITON_TRANSPOSE_PORTION = encode7bitTo8(TRITON_TRANSPOSE_PORTION_TEMP);
   TRITON_MODF_GLOB = [...dumpHeader, ...TRITON_TRANSPOSE_PORTION, ...dumpTail];
@@ -84,4 +86,29 @@ function zeroOnePresetTunning(keyIndex1, keyIndex2, portions = '') {
     ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
   }
 }
-function pa3xPresetsTunning(keyIndex1, keyIndex2) {}
+
+function pa3xPresetsTunning(keyIndex1, keyIndex2, portions = '') {
+  if (portions === 'first') {
+    PA3X_TUNNING.tunningTemp1[keyIndex1] = tunningValue;
+    PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
+    PA3X_TUNNING.tunningTemp1[keyIndex2] = tunningValue;
+    PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+  } else if (portions === 'second') {
+    PA3X_TUNNING.tunningTemp2[keyIndex1] = tunningValue;
+    PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
+    PA3X_TUNNING.tunningTemp2[keyIndex2] = tunningValue;
+    PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+  } else {
+    PA3X_TUNNING.tunningTemp1[keyIndex1] = tunningValue;
+    PA3X_TUNNING.tunningReady1 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp1);
+    PA3X_TUNNING.tunningTemp2[keyIndex2] = tunningValue;
+    PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
+  }
+  PA3X_TUNNING.tunningReady1[1] = 125;
+}
+
+function switchKeyIndex(key, synth) {
+  let keyIndex = 0;
+  keyIndex = tuningIndexes[synth][key];
+  return keyIndex;
+}
