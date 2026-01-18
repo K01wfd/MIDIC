@@ -104,7 +104,7 @@ userScaleButtons.forEach((btn) => {
     const btnPortion = +btn.dataset.portion;
     const key = btn.dataset.key;
     if (!globalState.isTunningDisabled) {
-      selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnValue, btnPortion, key));
+      selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnValue, key));
     }
   });
 });
@@ -136,9 +136,7 @@ scalePresetsButtons.forEach((btn) => {
 });
 
 resetBtn.addEventListener('click', (_) => {
-  sender.triton.resetGlobal();
-  sender.zeroOne.resetGlobal();
-  sender.pa3x.resetGlobal();
+  selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
 
   currentTransposeValue = 0;
   transposeValue.textContent = 0;
@@ -148,7 +146,7 @@ resetBtn.addEventListener('click', (_) => {
   scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
 
   showMessage(
-    '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>'
+    '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>',
   );
 });
 
@@ -190,5 +188,5 @@ document.addEventListener(
   function (event) {
     event.preventDefault();
   },
-  { passive: false }
+  { passive: false },
 );

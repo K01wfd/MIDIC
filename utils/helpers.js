@@ -42,6 +42,12 @@ function toHex7bit(value) {
   return byte.toString(16).toUpperCase().padStart(2, '0x');
 }
 
+function switchKeyIndex(key, synth) {
+  let keyIndex = 0;
+  keyIndex = tuningIndexes[synth][key];
+  return keyIndex;
+}
+
 function resetTunningPortions() {
   TRITON_TUNNING = JSON.parse(JSON.stringify(TRITON_TUNNING_DEFAULT));
   ZERO_ONE_TUNNING = JSON.parse(JSON.stringify(ZERO_ONE_TUNNING_DEFAULT));
@@ -60,12 +66,12 @@ function updateTritonTransposeGlob(transposeValue) {
 }
 
 function updateZeroOneTransposeGlob(transposeValue) {
-  const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 6);
-  const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(14);
+  const dumpHeader = zOneNewGlobal.slice(0, 6);
+  const dumpTail = zOneNewGlobal.slice(14);
 
   ZERO_ONE_TRANSPOSE_TEMP[1] = transposeValue - 64;
   ZERO_ONE_TRANSPOSE = encode7bitTo8(ZERO_ONE_TRANSPOSE_TEMP);
-  ZERO_ONE_MODF_GLOBAL = [...dumpHeader, ...ZERO_ONE_TRANSPOSE, ...dumpTail];
+  zOneNewGlobal = [...dumpHeader, ...ZERO_ONE_TRANSPOSE, ...dumpTail];
 }
 
 function zeroOnePresetTunning(keyIndex1, keyIndex2, portions = '') {
@@ -105,10 +111,4 @@ function pa3xPresetsTunning(keyIndex1, keyIndex2, portions = '') {
     PA3X_TUNNING.tunningReady2 = encode7bitTo8PA3X(PA3X_TUNNING.tunningTemp2);
   }
   PA3X_TUNNING.tunningReady1[1] = 125;
-}
-
-function switchKeyIndex(key, synth) {
-  let keyIndex = 0;
-  keyIndex = tuningIndexes[synth][key];
-  return keyIndex;
 }

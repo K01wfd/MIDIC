@@ -104,48 +104,41 @@ const sender = {
   },
 
   zeroOne: {
-    sendScaleTunning(value, portionNum, key = '') {
-      let keyIndex = switchKeyIndex(key, 'zeroOne');
-      const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
-      const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
+    sendScaleTunning(value, key) {
+      const keyDetails = tuningIndexes['zeroOne'][key];
 
-      if (portionNum === 1) {
-        let newKeyIndex = null;
-        if (sender.isTranspose && sender.whatTranspose === 'plus') newKeyIndex = keyIndex + sender.transValState;
-        else newKeyIndex = keyIndex;
-        if (newKeyIndex > keyIndex) newKeyIndex = keyIndex;
+      const sevenBitTuning = zeroOneState.get7bitsTuningParts();
+      sevenBitTuning[keyDetails.portion][keyDetails.index] = value;
 
-        ZERO_ONE_TUNNING.tunningTemp1[newKeyIndex] = value;
-        ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
-      } else if (portionNum === 2 && key === 'F#') {
-        ZERO_ONE_TUNNING.tunningTemp1[keyIndex] = value;
-        ZERO_ONE_TUNNING.tunningReady1 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp1);
-      } else {
-        ZERO_ONE_TUNNING.tunningTemp2[keyIndex] = value;
-        ZERO_ONE_TUNNING.tunningReady2 = encode7bitTo8(ZERO_ONE_TUNNING.tunningTemp2);
-      }
+      zeroOneState.encodeTuningAndUpdate(sevenBitTuning);
+      zeroOneState.updateTuningGlobal();
 
-      const tunningBody = [...ZERO_ONE_TUNNING.tunningReady1, ...ZERO_ONE_TUNNING.tunningReady2];
-      const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
-      ZERO_ONE_MODF_GLOBAL = combined;
-
-      trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
+      trMIDI.sendMessage(zeroOneState.getNewGlobal());
     },
 
     sendZeroTunning() {
-      resetTunningPortions();
-      const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
-      const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
-      const tunningBody = [...ZERO_ONE_TUNNING_DEFAULT.tunningReady1, ...ZERO_ONE_TUNNING_DEFAULT.tunningReady2];
-      const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
-      ZERO_ONE_MODF_GLOBAL = combined;
-      trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
+      zeroOneState.resetTunningParts();
+      trMIDI.sendMessage(zeroOneState.getNewGlobal());
+    },
+
+    sendTranspose(transposeValue) {
+      zeroOneState.encodeTransposeAndUpdate(transposeValue);
+      trMIDI.sendMessage(zeroOneState.getNewGlobal());
+    },
+
+    sendZeroTranspose() {
+      updateZeroOneTransposeGlob(64);
+      const dump = zOneNewGlobal;
+      trMIDI.sendMessage(dump);
+      sender.isTranspose = false;
+      sender.whatTranspose = null;
+      sender.transValState = 0;
     },
 
     sendScalePreset(scaleType) {
       ZERO_ONE_TUNNING = JSON.parse(JSON.stringify(ZERO_ONE_TUNNING_DEFAULT));
-      const dumpHeader = ZERO_ONE_MODF_GLOBAL.slice(0, 14);
-      const dumpTail = ZERO_ONE_MODF_GLOBAL.slice(-1);
+      const dumpHeader = zOneNewGlobal.slice(0, 14);
+      const dumpTail = zOneNewGlobal.slice(-1);
       switch (scaleType) {
         case 'BC': {
           zeroOnePresetTunning(2, 2);
@@ -229,29 +222,13 @@ const sender = {
       }
       const tunningBody = [...ZERO_ONE_TUNNING.tunningReady1, ...ZERO_ONE_TUNNING.tunningReady2];
       const combined = [...dumpHeader, ...tunningBody, ...dumpTail];
-      ZERO_ONE_MODF_GLOBAL = combined;
-      trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
-    },
-
-    sendZeroTranspose() {
-      updateZeroOneTransposeGlob(64);
-      const dump = ZERO_ONE_MODF_GLOBAL;
-      trMIDI.sendMessage(dump);
-      sender.isTranspose = false;
-      sender.whatTranspose = null;
-      sender.transValState = 0;
-    },
-
-    sendTranspose(transposeValue) {
-      sender.toggleTranspose(transposeValue);
-      updateZeroOneTransposeGlob(transposeValue);
-      const dump = ZERO_ONE_MODF_GLOBAL;
-      trMIDI.sendMessage(dump);
+      zOneNewGlobal = combined;
+      trMIDI.sendMessage(zOneNewGlobal);
     },
 
     resetGlobal() {
-      ZERO_ONE_MODF_GLOBAL = JSON.parse(JSON.stringify(ZERO_ONE_GLOBAL));
-      trMIDI.sendMessage(ZERO_ONE_MODF_GLOBAL);
+      zeroOneState.resetTunningParts();
+      trMIDI.sendMessage(zeroOneState.getNewGlobal());
     },
   },
 
