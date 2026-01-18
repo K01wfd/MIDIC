@@ -127,10 +127,15 @@ class SynthState {
   }
 
   encodeTransposeAndUpdate(transposeValue) {
-    this.sevenBitTranspose[this.indexInTransposePart] = transposeValue - 64;
     this.transposeValue = transposeValue;
-    const encodedTranspose = encode7bitTo8(this.sevenBitTranspose);
-    this.eightBitTranspose = [...encodedTranspose];
+    if (this.synth === 'pa3x') {
+      this.eightBitTranspose[this.indexInTransposePart] = transposeValue;
+    } else {
+      this.sevenBitTranspose[this.indexInTransposePart] = transposeValue - 64;
+      const encodedTranspose = encode7bitTo8(this.sevenBitTranspose);
+      this.eightBitTranspose = [...encodedTranspose];
+    }
+
     this.updateTransposeGlobal();
   }
 
@@ -163,5 +168,6 @@ const pa3xState = new SynthState(
   [6, -1],
   [[0, 6], -1],
   [240, 127, 127, 4, 4, 0, 64, 247],
+  5,
   [],
 );
