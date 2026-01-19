@@ -58,23 +58,23 @@ class SynthState {
 
   resetTunningParts() {
     this.#initiateTuningParts();
-    this.updateTuningGlobal();
+    this.#updateTuningGlobal();
   }
 
   resetTranspose() {
     this.#initiateTransposeParts();
-    this.updateTransposeGlobal();
+    this.#updateTransposeGlobal();
     this.transposeValue = 0;
-    this.updateTransposeState();
+    this.#updateTransposeState();
   }
 
   resetGlobal() {
     this.#initiateTuningParts();
     this.#initiateTransposeParts();
-    this.updateTuningGlobal();
-    this.updateTransposeGlobal();
+    this.#updateTuningGlobal();
+    this.#updateTransposeGlobal();
     this.transposeValue = 0;
-    this.updateTransposeState();
+    this.#updateTransposeState();
   }
 
   // -----------------------
@@ -99,21 +99,32 @@ class SynthState {
   }
 
   // -----------------------
-  updateTuningGlobal() {
+  #updateTuningGlobal() {
     const head = this.newGlobal.slice(this.tuningPartsMrgIndexes[0][0], this.tuningPartsMrgIndexes[0][1]);
     const tail = this.newGlobal.slice(this.tuningPartsMrgIndexes[1]);
     this.newGlobal = [...head, ...this.eightBitTuning, ...tail];
   }
 
-  updateTransposeGlobal() {
+  #updateTransposeGlobal() {
     if (this.transposeMrgIndexes.length > 0) {
       const head = this.newGlobal.slice(this.transposeMrgIndexes[0][0], this.transposeMrgIndexes[0][1]);
       const tail = this.newGlobal.slice(this.transposeMrgIndexes[1]);
+      this.newTranspose = [...this.eightBitTranspose];
       this.newGlobal = [...head, ...this.eightBitTranspose, ...tail];
     } else {
       this.newTranspose = [...this.eightBitTranspose];
     }
-    this.updateTransposeState();
+    this.#updateTransposeState();
+  }
+
+  #updateTransposeState() {
+    if (this.transposeValue > 0) {
+      this.whatTranspose = '1';
+    } else if (this.transposeValue < 0) {
+      this.whatTranspose = '-1';
+    } else {
+      this.whatTranspose = '0';
+    }
   }
 
   // ----------------------
@@ -121,13 +132,19 @@ class SynthState {
     const portion1 = sevBitTuningParts['1'];
     const portion2 = sevBitTuningParts['2'];
 
-    this.sevenBitTuning = [...portion1, ...portion2];
+    let encodedPortion1 = encode7bitTo8(portion1);
+    let encodedPortion2 = encode7bitTo8(portion2);
 
-    const encodedPortion1 = encode7bitTo8(portion1);
-    const encodedPortion2 = encode7bitTo8(portion2);
+    if (this.synth.startsWith('pa')) {
+      encodedPortion1 = encode7bitTo8PA3X(portion1);
+      encodedPortion2 = encode7bitTo8PA3X(portion2);
+      encodedPortion1[1] = 125;
+    }
+
+    this.sevenBitTuning = [...portion1, ...portion2];
     this.eightBitTuning = [...encodedPortion1, ...encodedPortion2];
 
-    this.updateTuningGlobal();
+    this.#updateTuningGlobal();
   }
 
   encodeTransposeAndUpdate(transposeValue) {
@@ -139,18 +156,46 @@ class SynthState {
       const encodedTranspose = encode7bitTo8(this.sevenBitTranspose);
       this.eightBitTranspose = [...encodedTranspose];
     }
-
-    this.updateTransposeGlobal();
+    this.transposeValue = transposeValue - 64;
+    this.#updateTransposeGlobal();
   }
 
-  updateTransposeState() {
-    if (this.transposeValue > 0) {
-      this.whatTranspose = '1';
-    } else if (this.transposeValue < 1) {
-      this.whatTranspose = '-1';
+  encodePresetsAndUpdate(presetData, sevBitTuningParts) {
+    const index1 = presetData.index1;
+    const index2 = presetData.index2;
+
+    const portions = presetData.portions;
+
+    const portion1 = sevBitTuningParts['1'];
+    const portion2 = sevBitTuningParts['2'];
+
+    let encodedPortion1 = [];
+    let encodedPortion2 = [];
+
+    if (portions === 'first') {
+      portion1[index1] = -50;
+      portion1[index2] = -50;
+      encodedPortion1 = encode7bitTo8(portion1);
+      encodedPortion2 = encode7bitTo8(portion2);
+    } else if (portions === 'second') {
+      portion2[index1] = -50;
+      portion2[index2] = -50;
+      encodedPortion1 = encode7bitTo8(portion1);
+      encodedPortion2 = encode7bitTo8(portion2);
     } else {
-      this.whatTranspose = '0';
+      portion1[index1] = -50;
+      portion2[index2] = -50;
+      encodedPortion1 = encode7bitTo8(portion1);
+      encodedPortion2 = encode7bitTo8(portion2);
     }
+
+    if (this.synth.startsWith('pa')) {
+      encodedPortion1 = encode7bitTo8PA3X(portion1);
+      encodedPortion2 = encode7bitTo8PA3X(portion2);
+      encodedPortion1[1] = 125;
+    }
+    this.eightBitTuning = [...encodedPortion1, ...encodedPortion2];
+    this.#updateTuningGlobal();
   }
 }
 
@@ -172,6 +217,6 @@ const pa3xState = new SynthState(
   [6, -1],
   [[0, 6], -1],
   [240, 127, 127, 4, 4, 0, 64, 247],
-  5,
+  6,
   [],
 );

@@ -2,7 +2,6 @@ const pa3xSynthBtn = document.getElementById('pa3x');
 const tritonSynthBtn = document.getElementById('triton');
 const zeroOneSynthBtn = document.getElementById('zeroOne');
 const colorRange = document.getElementById('colorRange');
-const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-btn"]');
 
 // alert('Please RESET first!');
 let selectedSynths = [];

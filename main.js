@@ -7,14 +7,19 @@ const centValueRange = document.getElementById('cent-range-value');
 const centRange = document.getElementById('centRange');
 
 const resetBtnWrapper = document.getElementById('reset-global-wrapper');
+const scalePresetsButtons = document.querySelectorAll('[data-id="scale-preset-btn"]');
+
 const resetBtn = document.getElementById('reset-global');
-const disableTunningBtn = document.getElementById('disable-tunning');
+const enaMicroTunning = document.getElementById('enable-micro-tunning');
 const message = document.getElementById('message');
 
 const globalState = {
   isScalePreset: false,
   isScaleTunning: false,
-  isTunningDisabled: false,
+  isMicroTuningEnabled: false,
+  centValue: -50,
+  isCentChanged: false,
+  currentScaleButtons: [],
 };
 
 let currentTransposeValue = +transposeValue.textContent;
@@ -25,15 +30,9 @@ transposeButtons.forEach((btn) => {
       showMessage('Please Select a model');
       return;
     }
-    if (globalState.isScalePreset || globalState.isScaleTunning) {
-      selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
-      userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
-      scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
-      globalState.isScalePreset = false;
-      globalState.isScaleTunning = false;
-    }
 
     const btnType = btn.id === 'transpose+' ? '+' : '-';
+
     if (btnType === '+' && currentTransposeValue < 12) {
       currentTransposeValue++;
       transposeValue.textContent = currentTransposeValue.toString();
@@ -44,9 +43,7 @@ transposeButtons.forEach((btn) => {
       if (currentTransposeValue < 0) btn.classList.add('btn-active');
     }
 
-    setTimeout(() => {
-      selectedSynths.forEach((synth) => sender[synth].sendTranspose(currentTransposeValue + 64));
-    }, 100);
+    selectedSynths.forEach((synth) => sender[synth].sendTranspose(currentTransposeValue + 64));
     if (currentTransposeValue === 0) transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
   });
 });
@@ -59,14 +56,9 @@ transposeValue.addEventListener('click', (_) => {
   if (currentTransposeValue === 0) return;
   transposeValue.textContent = '0';
   currentTransposeValue = 0;
-  selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
 
   transposeButtons.forEach((btn) => btn.classList.remove('btn-active'));
-  userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
-  scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
-  setTimeout(() => {
-    selectedSynths.forEach((synth) => sender[synth].sendZeroTranspose());
-  }, 100);
+  selectedSynths.forEach((synth) => sender[synth].sendZeroTranspose());
 });
 
 userScaleButtons.forEach((btn) => {
@@ -77,7 +69,7 @@ userScaleButtons.forEach((btn) => {
     }
 
     if (globalState.isScalePreset) {
-      resetTunningPortions();
+      selectedSynths.forEach((synth) => sender[synth].resetTunning());
       scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
       globalState.isScalePreset = false;
     }
@@ -99,11 +91,13 @@ userScaleButtons.forEach((btn) => {
       btn.value = tunningValue;
       globalState.isScaleTunning = true;
     }
-
     const btnValue = +btn.value;
-    const btnPortion = +btn.dataset.portion;
     const key = btn.dataset.key;
-    if (!globalState.isTunningDisabled) {
+
+    if (globalState.currentScaleButtons.indexOf(key) === -1) globalState.currentScaleButtons.push(key);
+    else globalState.currentScaleButtons = globalState.currentScaleButtons.filter((btn) => btn !== key);
+
+    if (!globalState.isMicroTuningEnabled) {
       selectedSynths.forEach((synth) => sender[synth].sendScaleTunning(btnValue, key));
     }
   });
@@ -111,24 +105,27 @@ userScaleButtons.forEach((btn) => {
 
 scalePresetsButtons.forEach((btn) => {
   btn.addEventListener('click', (_) => {
-    if (sender.isTranspose) {
-      showMessage('Transpose on');
-      return;
-    }
     if (selectedSynths.length === 0) {
       showMessage('Please Select a model');
       return;
     }
-    userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+
+    if (globalState.isScaleTunning) {
+      selectedSynths.forEach((synth) => sender[synth].resetTunning());
+      userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+      globalState.isScaleTunning = false;
+    }
+
     const scaleType = btn.value;
-    if (!btn.classList.contains('btn-active')) {
+
+    btn.classList.add('btn-active');
+    if (btn.classList.contains('btn-active')) {
       scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
-      btn.classList.add('btn-active');
+      btn.classList.toggle('btn-active');
       globalState.isScalePreset = true;
       selectedSynths.forEach((synth) => sender[synth].sendScalePreset(scaleType));
     } else {
       btn.classList.remove('btn-active');
-      userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
       globalState.isScalePreset = false;
       selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
     }
@@ -150,31 +147,31 @@ resetBtn.addEventListener('click', (_) => {
   );
 });
 
-disableTunningBtn.addEventListener('click', (e) => {
-  disableTunningBtn.classList.toggle('btn-active');
-  if (disableTunningBtn.classList.contains('btn-active')) {
-    globalState.isTunningDisabled = true;
+enaMicroTunning.addEventListener('click', (e) => {
+  enaMicroTunning.classList.toggle('btn-active');
+  globalState.isMicroTuningEnabled = !globalState.isMicroTuningEnabled;
+
+  if (globalState.isMicroTuningEnabled) {
     userScaleButtons.forEach((btn) => btn.classList.add('btn-disabled'));
   } else {
-    globalState.isTunningDisabled = false;
+    userScaleButtons.forEach((btn) => btn.classList.remove('btn-disabled'));
+    selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
+  }
+  userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
+});
+
+centRange.addEventListener('input', (e) => {
+  if (globalState.isMicroTuningEnabled) {
+    const centVal = Math.floor(parseFloat(e.target.value)).toFixed();
+    globalState.centValue = centVal;
+    centValueRange.textContent = centVal;
     userScaleButtons.forEach((btn) => {
       if (btn.classList.contains('btn-active')) {
         const adjCentElem = btn.nextElementSibling;
         adjCentElem.value = centValueRange.textContent;
       }
-      btn.classList.remove('btn-active');
-      btn.classList.remove('btn-disabled');
     });
   }
-});
-
-centRange.addEventListener('input', (e) => {
-  if (!globalState.isTunningDisabled) {
-    alert('please disable tunning first');
-    centRange.value = -50;
-  }
-  const centVal = Math.floor(parseFloat(e.target.value)).toFixed();
-  centValueRange.textContent = centVal;
 });
 
 function showMessage(msg) {

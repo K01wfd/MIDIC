@@ -14,7 +14,21 @@ const tuningIndexes = {
     B: { index: 4, portion: 2 },
   },
   triton: { C: 1, CSharp: 2, D: 3, DSharp: 4, E: 5, F: 6, FSharp: 0, G: 1, GSharp: 2, A: 3, ASarp: 4, B: 5 },
-  pa3x: { C: 2, CSharp: 3, D: 4, DSharp: 5, E: 6, F: 0, FSharp: 1, G: 2, GSharp: 3, A: 4, ASarp: 5, B: 6 },
+
+  pa3x: {
+    C: { index: 2, portion: 1 },
+    CSharp: { index: 3, portion: 1 },
+    D: { index: 4, portion: 1 },
+    DSharp: { index: 5, portion: 1 },
+    E: { index: 6, portion: 1 },
+    F: { index: 0, portion: 2 },
+    FSharp: { index: 1, portion: 2 },
+    G: { index: 2, portion: 2 },
+    GSharp: { index: 3, portion: 2 },
+    A: { index: 4, portion: 2 },
+    ASarp: { index: 5, portion: 2 },
+    B: { index: 6, portion: 2 },
+  },
 };
 
 const scalePreToIndexes = {
@@ -39,6 +53,28 @@ const scalePreToIndexes = {
     RG: { index1: 6, index2: 4, portions: 'both' },
     RA: { index1: 1, index2: 1, portions: 'both' },
     RB: { index1: 3, index2: 3, portions: 'both' },
+  },
+  pa3x: {
+    BC: { index1: 4, index2: 4, portions: 'both' },
+    BCSharp: { index1: 5, index2: 5, portions: 'both' },
+    BD: { index1: 6, index2: 6, portions: 'both' },
+    BDSharp: { index1: 2, index2: 0, portions: 'both' },
+    BE: { index1: 3, index2: 1, portions: 'both' },
+    BF: { index1: 4, index2: 2, portions: 'both' },
+    BFSharp: { index1: 5, index2: 3, portions: 'both' },
+    BG: { index1: 6, index2: 4, portions: 'both' },
+    BGSharp: { index1: 5, index2: 0, portions: 'second' },
+    BA: { index1: 6, index2: 1, portions: 'second' },
+    BASharp: { index1: 2, index2: 2, portions: 'both' },
+    BB: { index1: 3, index2: 3, portions: 'both' },
+
+    RC: { index1: 6, index2: 6, portions: 'both' },
+    RD: { index1: 3, index2: 1, portions: 'both' },
+    RE: { index1: 5, index2: 3, portions: 'both' },
+    RF: { index1: 6, index2: 4, portions: 'both' },
+    RG: { index1: 6, index2: 1, portions: 'second' },
+    RA: { index1: 3, index2: 3, portions: 'both' },
+    RB: { index1: 5, index2: 5, portions: 'both' },
   },
 };
 
