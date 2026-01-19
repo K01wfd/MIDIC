@@ -136,7 +136,7 @@ scalePresetsButtons.forEach((btn) => {
 });
 
 resetBtn.addEventListener('click', (_) => {
-  selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
+  selectedSynths.forEach((synth) => sender[synth].resetGlobal());
 
   currentTransposeValue = 0;
   transposeValue.textContent = 0;

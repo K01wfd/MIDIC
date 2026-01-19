@@ -63,6 +63,7 @@ class SynthState {
 
   resetTranspose() {
     this.#initiateTransposeParts();
+    this.updateTransposeGlobal();
     this.transposeValue = 0;
     this.updateTransposeState();
   }
@@ -71,6 +72,9 @@ class SynthState {
     this.#initiateTuningParts();
     this.#initiateTransposeParts();
     this.updateTuningGlobal();
+    this.updateTransposeGlobal();
+    this.transposeValue = 0;
+    this.updateTransposeState();
   }
 
   // -----------------------
