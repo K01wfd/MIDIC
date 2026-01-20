@@ -68,7 +68,7 @@ userScaleButtons.forEach((btn) => {
       return;
     }
 
-    if (globalState.isScalePreset) {
+    if (globalState.isScalePreset && !globalState.isMicroTuningEnabled) {
       selectedSynths.forEach((synth) => sender[synth].resetTunning());
       scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
       globalState.isScalePreset = false;
@@ -116,14 +116,14 @@ scalePresetsButtons.forEach((btn) => {
       globalState.isScaleTunning = false;
     }
 
-    const scaleType = btn.value;
-
+    const scaleName = btn.value;
+    const scaleType = btn.dataset.scale;
     btn.classList.add('btn-active');
     if (btn.classList.contains('btn-active')) {
       scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
       btn.classList.toggle('btn-active');
       globalState.isScalePreset = true;
-      selectedSynths.forEach((synth) => sender[synth].sendScalePreset(scaleType));
+      selectedSynths.forEach((synth) => sender[synth].sendScalePreset(scaleType, scaleName));
     } else {
       btn.classList.remove('btn-active');
       globalState.isScalePreset = false;
@@ -155,7 +155,7 @@ enaMicroTunning.addEventListener('click', (e) => {
     userScaleButtons.forEach((btn) => btn.classList.add('btn-disabled'));
   } else {
     userScaleButtons.forEach((btn) => btn.classList.remove('btn-disabled'));
-    selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
+    if (!globalState.isScalePreset) selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
   }
   userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
 });

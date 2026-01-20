@@ -1,4 +1,4 @@
-class SynthState {
+class SynthBrain {
   defaultGlobal = [];
   newGlobal = [];
   synth = null;
@@ -199,24 +199,34 @@ class SynthState {
   }
 }
 
-const zeroOneState = new SynthState(
+const tritonExtremeBrain = new SynthBrain(
+  'trExtreme',
+  synthsGlobal.tritonExtreme,
+  synthsIndexes.tritonExtreme.tuningStartEnd,
+  synthsIndexes.tritonExtreme.tuningMerging,
+  synthTransposes.tritonExtreme,
+  synthsIndexes.tritonExtreme.transposeValueIndexInPart,
+  synthsIndexes.tritonExtreme.transposeMerging,
+);
+
+const zeroOneBrain = new SynthBrain(
   'zeroOne',
-  [240, 66, 48, 43, 81, 0, 0, 0, 0, 0, 7, 7, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 247],
-  [14, -1],
-  [[0, 14], -1],
-  [0, 0, 0, 0, 7, 7, 4, 0],
-  1,
-  [[0, 6], 14],
+  synthsGlobal.zeroOne,
+  synthsIndexes.zeroOne.tuningStartEnd,
+  synthsIndexes.zeroOne.tuningMerging,
+  synthTransposes.zeroOne,
+  synthsIndexes.zeroOne.transposeValueIndexInPart,
+  synthsIndexes.zeroOne.transposeMerging,
 );
 
 // if transpose Data not provided, empty obj, and transpose array provided, extract from array
 
-const pa3xState = new SynthState(
+const pa3xBrain = new SynthBrain(
   'pa3x',
-  [240, 66, 127, 96, 1, 1, 0, 125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 247],
-  [6, -1],
-  [[0, 6], -1],
-  [240, 127, 127, 4, 4, 0, 64, 247],
-  6,
-  [],
+  synthsGlobal.pa3x,
+  synthsIndexes.pa3x.tuningStartEnd,
+  synthsIndexes.pa3x.tuningMerging,
+  synthTransposes.pa3x,
+  synthsIndexes.pa3x.transposeValueIndexInPart,
+  synthsIndexes.pa3x.transposeMerging,
 );

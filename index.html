@@ -22,9 +22,20 @@
             </li>
             <li>
               <div class="transpose">
-                <button id="transpose-" data-id="transpose-btn">-</button>
+                <button id="transpose-" data-id="transpose-btn">
+                  <svg class="symbol" width="20" height="20" viewBox="0 0 60 120" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 5 V90" stroke="var(--icon-fill)" stroke-width="12" stroke-linecap="round" />
+                    <path
+                      d="M25 55 C65 65, 45 75, 25 80"
+                      fill="none"
+                      stroke="var(--icon-fill)"
+                      stroke-width="12"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
                 <div id="transpose-value">0</div>
-                <button id="transpose+" data-id="transpose-btn">+</button>
+                <button id="transpose+" data-id="transpose-btn">#</button>
               </div>
             </li>
           </menu>
@@ -124,8 +135,8 @@
                 <input type="number" name="GSharp" min="-90" max="90" value="-50" disabled="true" />
               </div>
               <div class="btn-group">
-                <button data-id="userscale-btn" data-index="4" data-key="ASarp" data-portion="2">A#</button>
-                <input type="number" name="ASarp" min="-90" max="90" value="-50" disabled="true" />
+                <button data-id="userscale-btn" data-index="4" data-key="ASharp" data-portion="2">A#</button>
+                <input type="number" name="ASharp" min="-90" max="90" value="-50" disabled="true" />
               </div>
             </div>
           </div>
@@ -159,30 +170,30 @@
               <input type="number" name="B" min="-90" max="90" value="-50" disabled="true" />
             </div>
           </div>
-          <div class="scale-presets">
-            <button data-id="scale-preset-btn" value="BC">Bayat C</button>
-            <button data-id="scale-preset-btn" value="BCSharp">Bayat C#</button>
-            <button data-id="scale-preset-btn" value="BD">Bayat D</button>
-            <button data-id="scale-preset-btn" value="BDSharp">Bayat D#</button>
-            <button data-id="scale-preset-btn" value="BE">Bayat E</button>
-            <button data-id="scale-preset-btn" value="BF">Bayat F</button>
-            <button data-id="scale-preset-btn" value="BFSharp">Bayat F#</button>
-            <button data-id="scale-preset-btn" value="BG">Bayat G</button>
-            <button data-id="scale-preset-btn" value="BGSharp">Bayat G#</button>
-            <button data-id="scale-preset-btn" value="BA">Bayat A</button>
-            <button data-id="scale-preset-btn" value="BASharp">Bayat A#</button>
-            <button data-id="scale-preset-btn" value="BB">Bayat B</button>
+        </div>
+        <div class="scale-presets">
+          <button data-id="scale-preset-btn" value="BC" data-scale="bayat">Bayat C</button>
+          <button data-id="scale-preset-btn" value="BCSharp" data-scale="bayat">Bayat C#</button>
+          <button data-id="scale-preset-btn" value="BD" data-scale="bayat">Bayat D</button>
+          <button data-id="scale-preset-btn" value="BDSharp" data-scale="bayat">Bayat D#</button>
+          <button data-id="scale-preset-btn" value="BE" data-scale="bayat">Bayat E</button>
+          <button data-id="scale-preset-btn" value="BF" data-scale="bayat">Bayat F</button>
+          <button data-id="scale-preset-btn" value="BFSharp" data-scale="bayat">Bayat F#</button>
+          <button data-id="scale-preset-btn" value="BG" data-scale="bayat">Bayat G</button>
+          <button data-id="scale-preset-btn" value="BGSharp" data-scale="bayat">Bayat G#</button>
+          <button data-id="scale-preset-btn" value="BA" data-scale="bayat">Bayat A</button>
+          <button data-id="scale-preset-btn" value="BASharp" data-scale="bayat">Bayat A#</button>
+          <button data-id="scale-preset-btn" value="BB" data-scale="bayat">Bayat B</button>
 
-            <div class="vertical-devider" aria-hidden="true"></div>
+          <div class="vertical-devider" aria-hidden="true"></div>
 
-            <button data-id="scale-preset-btn" value="RC">Rast C</button>
-            <button data-id="scale-preset-btn" value="RD">Rast D</button>
-            <button data-id="scale-preset-btn" value="RE">Rast E</button>
-            <button data-id="scale-preset-btn" value="RF">Rast F</button>
-            <button data-id="scale-preset-btn" value="RG">Rast G</button>
-            <button data-id="scale-preset-btn" value="RA">Rast A</button>
-            <button data-id="scale-preset-btn" value="RB">Rast B</button>
-          </div>
+          <button data-id="scale-preset-btn" value="RC" data-scale="rast">Rast C</button>
+          <button data-id="scale-preset-btn" value="RD" data-scale="rast">Rast D</button>
+          <button data-id="scale-preset-btn" value="RE" data-scale="rast">Rast E</button>
+          <button data-id="scale-preset-btn" value="RF" data-scale="rast">Rast F</button>
+          <button data-id="scale-preset-btn" value="RG" data-scale="rast">Rast G</button>
+          <button data-id="scale-preset-btn" value="RA" data-scale="rast">Rast A</button>
+          <button data-id="scale-preset-btn" value="RB" data-scale="rast">Rast B</button>
         </div>
         <div id="message" style="display: none"></div>
       </main>
