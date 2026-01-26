@@ -69,7 +69,7 @@ userScaleButtons.forEach((btn) => {
     }
 
     if (globalState.isScalePreset && !globalState.isMicroTuningEnabled) {
-      selectedSynths.forEach((synth) => sender[synth].resetTunning());
+      selectedSynths.forEach((synth) => sender[synth].resetTuning());
       scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
       globalState.isScalePreset = false;
     }
@@ -118,7 +118,7 @@ scalePresetsButtons.forEach((btn) => {
 
     const scaleName = btn.value;
     const scaleType = btn.dataset.scale;
-    btn.classList.add('btn-active');
+    btn.classList.toggle('btn-active');
     if (btn.classList.contains('btn-active')) {
       scalePresetsButtons.forEach((btn) => btn.classList.remove('btn-active'));
       btn.classList.toggle('btn-active');

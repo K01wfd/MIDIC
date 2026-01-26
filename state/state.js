@@ -39,7 +39,9 @@ class SynthBrain {
 
   #initiateTuningParts() {
     const tuningChunk = this.defaultGlobal.slice(this.extractTuningIndexes[0], this.extractTuningIndexes[1]);
+
     this.eightBitTuning = [...tuningChunk.slice(0, 8), ...tuningChunk.slice(8)];
+
     this.sevenBitTuning = [...tuningChunk.slice(1, 8), ...tuningChunk.slice(9)];
   }
 
@@ -50,7 +52,7 @@ class SynthBrain {
 
   // -------------------------
 
-  resetTuningInGlobal() {
+  resetTuning() {
     this.#initiateTuningParts();
     this.#updateTuningGlobal();
   }
@@ -98,8 +100,8 @@ class SynthBrain {
 
   #getHeadAndTail(updateIndexes) {
     const index1 = updateIndexes[0];
-    const index2 = updateIndexes[2];
-    const index3 = updateIndexes[3];
+    const index2 = updateIndexes[1];
+    const index3 = updateIndexes[2];
     const head = this.newGlobal.slice(index1, index2);
     const tail = this.newGlobal.slice(index3);
     return { head, tail };
@@ -108,6 +110,7 @@ class SynthBrain {
   // -----------------------
   #updateTuningGlobal() {
     const { head, tail } = this.#getHeadAndTail(this.updateTuningIndexes);
+
     this.newGlobal = [...head, ...this.eightBitTuning, ...tail];
   }
 

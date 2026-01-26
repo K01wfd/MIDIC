@@ -1,7 +1,7 @@
 const sender = {
   tritonExtreme: {
     sendScaleTunning(value, key) {
-      const keyDetails = modelsKeysDetails['zeroOne'][key];
+      const keyDetails = modelsKeysDetails['tritonExtreme'][key];
 
       const sevenBitTuning = tritonExtremeBrain.get7bitsTuningParts();
       sevenBitTuning[keyDetails.portion][keyDetails.index] = value;
@@ -11,12 +11,12 @@ const sender = {
       trMIDI.sendMessage(tritonExtremeBrain.getNewGlobal());
     },
 
-    resetTunning() {
-      pa3xBrain.resetTunningParts();
+    resetTuning() {
+      tritonExtremeBrain.resetTuning();
     },
 
     sendZeroTunning() {
-      tritonExtremeBrain.resetTunningParts();
+      tritonExtremeBrain.resetTuning();
       trMIDI.sendMessage(tritonExtremeBrain.getNewGlobal());
     },
 
@@ -55,12 +55,13 @@ const sender = {
       trMIDI.sendMessage(zeroOneBrain.getNewGlobal());
     },
 
-    resetTunning() {
-      pa3xBrain.resetTunningParts();
+    resetTuning() {
+      zeroOneBrain.resetTuning();
     },
 
     sendZeroTunning() {
-      zeroOneBrain.resetTunningParts();
+      zeroOneBrain.resetTuning();
+
       trMIDI.sendMessage(zeroOneBrain.getNewGlobal());
     },
 
@@ -99,12 +100,12 @@ const sender = {
       trMIDI.sendMessage(pa3xBrain.getNewGlobal());
     },
 
-    resetTunning() {
-      pa3xBrain.resetTunningParts();
+    resetTuning() {
+      pa3xBrain.resetTuning();
     },
 
     sendZeroTunning() {
-      pa3xBrain.resetTunningParts();
+      pa3xBrain.resetTuning();
       trMIDI.sendMessage(pa3xBrain.getNewGlobal());
     },
 

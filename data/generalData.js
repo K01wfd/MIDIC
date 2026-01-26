@@ -76,8 +76,8 @@ const modelsScalesPresets = {
     rast: generateModelPresets(rastKeys, 'zeroOne'),
   },
   pax: {
-    bayat: generateModelPresets(bayatKeys, 'pa3x'),
-    rast: generateModelPresets(rastKeys, 'pa3x'),
+    bayat: generateModelPresets(bayatKeys, 'pax'),
+    rast: generateModelPresets(rastKeys, 'pax'),
   },
   tritonExtreme: {
     bayat: generateModelPresets(bayatKeys, 'tritonExtreme'),
@@ -159,27 +159,6 @@ const synthsGlobals = {
     0, 0, 12, 247,
   ],
   pax: [240, 66, 127, 96, 1, 1, 0, 125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 247],
-};
-
-const synthsIndexes = {
-  tritonExtreme: {
-    tuningStartEnd: [14, 30],
-    tuningMerging: [[0, 14], 30],
-    transposeValueIndexInPart: 1,
-    transposeMerging: [[0, 6], 14],
-  },
-  zeroOne: {
-    tuningStartEnd: [14, -1],
-    tuningMerging: [[0, 14], -1],
-    transposeValueIndexInPart: 1,
-    transposeMerging: [[0, 6], 14],
-  },
-  pax: {
-    tuningStartEnd: [6, -1],
-    tuningMerging: [[0, 6], -1],
-    transposeValueIndexInPart: 6,
-    transposeMerging: [],
-  },
 };
 
 const modelsStaticData = {

@@ -11,8 +11,8 @@ if (savedSynths && savedSynths.synths) {
   selectedSynths = [...savedSynths.synths];
 }
 
-selectedSynths.indexOf('pa3x') !== -1 && paxSynthBtn.classList.add('btn-active');
-selectedSynths.indexOf('triton') !== -1 && tritonExtremeSynthBtn.classList.add('btn-active');
+selectedSynths.indexOf('pax') !== -1 && paxSynthBtn.classList.add('btn-active');
+selectedSynths.indexOf('tritonExtreme') !== -1 && tritonExtremeSynthBtn.classList.add('btn-active');
 selectedSynths.indexOf('zeroOne') !== -1 && zeroOneSynthBtn.classList.add('btn-active');
 
 const buttons = [paxSynthBtn, tritonExtremeSynthBtn, zeroOneSynthBtn];
