@@ -111,7 +111,7 @@ scalePresetsButtons.forEach((btn) => {
     }
 
     if (globalState.isScaleTunning) {
-      selectedSynths.forEach((synth) => sender[synth].resetTunning());
+      selectedSynths.forEach((synth) => sender[synth].sendZeroTunning());
       userScaleButtons.forEach((btn) => btn.classList.remove('btn-active'));
       globalState.isScaleTunning = false;
     }
