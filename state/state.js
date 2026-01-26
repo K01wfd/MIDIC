@@ -1,50 +1,44 @@
 class SynthBrain {
+  synth = '';
   defaultGlobal = [];
   newGlobal = [];
-  synth = null;
 
   sevenBitTuning = [];
   eightBitTuning = [];
   sevenBitTranspose = [];
   eightBitTranspose = [];
 
-  tuningPartsIndexes = [];
-  tuningPartsMrgIndexes = [];
+  extractTuningIndexes = [];
+  updateTuningIndexes = [];
 
   defaultTranspose = [];
   newTranspose = [];
-  indexInTransposePart = null;
-  transposeMrgIndexes = [];
+  extractTransposeIndexes = [];
+  updateTransposeIndexes = [];
+  isSeperateTranspose = false;
+  transposeValIndex = 0;
   transposeValue = 0;
   whatTranspose = '0';
-  constructor(
-    synth,
-    global,
-    eightBitTuningPartIndexes,
-    tuningPartsMrgIndexes,
-    transposePart,
-    indexInTransposePart,
-    transposeMrgIndexes = [],
-  ) {
-    this.defaultGlobal = global;
-    this.newGlobal = global;
 
-    this.synth = synth;
-
-    this.tuningPartsIndexes = eightBitTuningPartIndexes;
-    this.tuningPartsMrgIndexes = tuningPartsMrgIndexes;
-
-    this.defaultTranspose = transposePart;
-    this.newTranspose = transposePart;
-    this.transposeMrgIndexes = transposeMrgIndexes;
-    this.indexInTransposePart = indexInTransposePart;
+  constructor(staticData) {
+    this.synth = staticData.modelId;
+    this.defaultGlobal = staticData.global;
+    this.newGlobal = staticData.global;
+    this.defaultTranspose = staticData.transpose;
+    this.newTranspose = staticData.transpose;
+    this.extractTuningIndexes = staticData.extractTuningIndexes;
+    this.updateTuningIndexes = staticData.updateTuningIndexes;
+    this.extractTransposeIndexes = staticData.extractTransposeIndexes;
+    this.updateTransposeIndexes = staticData.updateTransposeIndexs;
+    this.transposeValIndex = staticData.transposeValueIndex;
+    this.isSeperateTranspose = staticData.isSeperateTranspose;
 
     this.#initiateTuningParts();
     this.#initiateTransposeParts();
   }
 
   #initiateTuningParts() {
-    const tuningChunk = this.defaultGlobal.slice(this.tuningPartsIndexes[0], this.tuningPartsIndexes[1]);
+    const tuningChunk = this.defaultGlobal.slice(this.extractTuningIndexes[0], this.extractTuningIndexes[1]);
     this.eightBitTuning = [...tuningChunk.slice(0, 8), ...tuningChunk.slice(8)];
     this.sevenBitTuning = [...tuningChunk.slice(1, 8), ...tuningChunk.slice(9)];
   }
@@ -56,7 +50,7 @@ class SynthBrain {
 
   // -------------------------
 
-  resetTunningParts() {
+  resetTuningInGlobal() {
     this.#initiateTuningParts();
     this.#updateTuningGlobal();
   }
@@ -68,7 +62,7 @@ class SynthBrain {
     this.#updateTransposeState();
   }
 
-  resetGlobal() {
+  resetAll() {
     this.#initiateTuningParts();
     this.#initiateTransposeParts();
     this.#updateTuningGlobal();
@@ -98,17 +92,28 @@ class SynthBrain {
     return this.sevenBitTranspose;
   }
 
+  getModelId() {
+    return this.synth;
+  }
+
+  #getHeadAndTail(updateIndexes) {
+    const index1 = updateIndexes[0];
+    const index2 = updateIndexes[2];
+    const index3 = updateIndexes[3];
+    const head = this.newGlobal.slice(index1, index2);
+    const tail = this.newGlobal.slice(index3);
+    return { head, tail };
+  }
+
   // -----------------------
   #updateTuningGlobal() {
-    const head = this.newGlobal.slice(this.tuningPartsMrgIndexes[0][0], this.tuningPartsMrgIndexes[0][1]);
-    const tail = this.newGlobal.slice(this.tuningPartsMrgIndexes[1]);
+    const { head, tail } = this.#getHeadAndTail(this.updateTuningIndexes);
     this.newGlobal = [...head, ...this.eightBitTuning, ...tail];
   }
 
   #updateTransposeGlobal() {
-    if (this.transposeMrgIndexes.length > 0) {
-      const head = this.newGlobal.slice(this.transposeMrgIndexes[0][0], this.transposeMrgIndexes[0][1]);
-      const tail = this.newGlobal.slice(this.transposeMrgIndexes[1]);
+    if (!this.isSeperateTranspose) {
+      const { head, tail } = this.#getHeadAndTail(this.updateTransposeIndexes);
       this.newTranspose = [...this.eightBitTranspose];
       this.newGlobal = [...head, ...this.eightBitTranspose, ...tail];
     } else {
@@ -148,11 +153,12 @@ class SynthBrain {
   }
 
   encodeTransposeAndUpdate(transposeValue) {
+    // here we need to make sure all models with seperate transpose accept not encoded data
     this.transposeValue = transposeValue;
-    if (this.synth === 'pa3x') {
-      this.eightBitTranspose[this.indexInTransposePart] = transposeValue;
+    if (this.isSeperateTranspose) {
+      this.eightBitTranspose[this.transposeValIndex] = transposeValue;
     } else {
-      this.sevenBitTranspose[this.indexInTransposePart] = transposeValue - 64;
+      this.sevenBitTranspose[this.transposeValIndex] = transposeValue - 64;
       const encodedTranspose = encode7bitTo8(this.sevenBitTranspose);
       this.eightBitTranspose = [...encodedTranspose];
     }
@@ -172,16 +178,19 @@ class SynthBrain {
     let encodedPortion1 = [];
     let encodedPortion2 = [];
 
+    // if the preset is inside portion 1
     if (portions === 'first') {
       portion1[index1] = -50;
       portion1[index2] = -50;
       encodedPortion1 = encode7bitTo8(portion1);
       encodedPortion2 = encode7bitTo8(portion2);
+      // if the preset is inside portion 2
     } else if (portions === 'second') {
       portion2[index1] = -50;
       portion2[index2] = -50;
       encodedPortion1 = encode7bitTo8(portion1);
       encodedPortion2 = encode7bitTo8(portion2);
+      // if the preset is inside both portions
     } else {
       portion1[index1] = -50;
       portion2[index2] = -50;
@@ -199,34 +208,10 @@ class SynthBrain {
   }
 }
 
-const tritonExtremeBrain = new SynthBrain(
-  'trExtreme',
-  synthsGlobal.tritonExtreme,
-  synthsIndexes.tritonExtreme.tuningStartEnd,
-  synthsIndexes.tritonExtreme.tuningMerging,
-  synthTransposes.tritonExtreme,
-  synthsIndexes.tritonExtreme.transposeValueIndexInPart,
-  synthsIndexes.tritonExtreme.transposeMerging,
-);
+const tritonExtremeBrain = new SynthBrain(modelsStaticData.tritonExtreme);
 
-const zeroOneBrain = new SynthBrain(
-  'zeroOne',
-  synthsGlobal.zeroOne,
-  synthsIndexes.zeroOne.tuningStartEnd,
-  synthsIndexes.zeroOne.tuningMerging,
-  synthTransposes.zeroOne,
-  synthsIndexes.zeroOne.transposeValueIndexInPart,
-  synthsIndexes.zeroOne.transposeMerging,
-);
+const zeroOneBrain = new SynthBrain(modelsStaticData.zeroOne);
 
 // if transpose Data not provided, empty obj, and transpose array provided, extract from array
 
-const pa3xBrain = new SynthBrain(
-  'pa3x',
-  synthsGlobal.pa3x,
-  synthsIndexes.pa3x.tuningStartEnd,
-  synthsIndexes.pa3x.tuningMerging,
-  synthTransposes.pa3x,
-  synthsIndexes.pa3x.transposeValueIndexInPart,
-  synthsIndexes.pa3x.transposeMerging,
-);
+const pa3xBrain = new SynthBrain(modelsStaticData.pax);

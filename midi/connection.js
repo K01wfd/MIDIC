@@ -29,18 +29,18 @@ class tritonMIDI extends EventTarget {
         this.output = output;
       });
       if (this.access.inputs.size === 0) {
-        alert('No MIDI Input Interface Connected');
+        // alert('No MIDI Input Interface Connected');
       }
       // Collect inputs and add listeners
       this.access.inputs.forEach((input) => {
         this.input = input;
         input.onmidimessage = (msg) => this.#handleMIDIMessage(msg);
       });
-      alert('✅ MIDI IS SUPPORTED ✅');
+      // alert('✅ MIDI IS SUPPORTED ✅');
       // Notify when ready
       this.dispatchEvent(new CustomEvent('ready'));
     } catch (err) {
-      alert('MIDI NOT SUPPORTED 🚫');
+      // alert('MIDI NOT SUPPORTED 🚫');
       console.error('❌ Error accessing MIDI:', err);
     }
   }

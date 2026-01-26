@@ -187,3 +187,6 @@ document.addEventListener(
   },
   { passive: false },
 );
+document.addEventListener('select', function (event) {
+  event.preventDefault();
+});

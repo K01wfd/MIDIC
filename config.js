@@ -1,5 +1,5 @@
-const pa3xSynthBtn = document.getElementById('pa3x');
-const tritonSynthBtn = document.getElementById('triton');
+const paxSynthBtn = document.getElementById('pax');
+const tritonExtremeSynthBtn = document.getElementById('tritonExtreme');
 const zeroOneSynthBtn = document.getElementById('zeroOne');
 const colorRange = document.getElementById('colorRange');
 
@@ -11,11 +11,11 @@ if (savedSynths && savedSynths.synths) {
   selectedSynths = [...savedSynths.synths];
 }
 
-selectedSynths.indexOf('pa3x') !== -1 && pa3xSynthBtn.classList.add('btn-active');
-selectedSynths.indexOf('triton') !== -1 && tritonSynthBtn.classList.add('btn-active');
+selectedSynths.indexOf('pa3x') !== -1 && paxSynthBtn.classList.add('btn-active');
+selectedSynths.indexOf('triton') !== -1 && tritonExtremeSynthBtn.classList.add('btn-active');
 selectedSynths.indexOf('zeroOne') !== -1 && zeroOneSynthBtn.classList.add('btn-active');
 
-const buttons = [pa3xSynthBtn, tritonSynthBtn, zeroOneSynthBtn];
+const buttons = [paxSynthBtn, tritonExtremeSynthBtn, zeroOneSynthBtn];
 
 buttons.forEach((btn) => {
   btn.addEventListener('click', (_) => {

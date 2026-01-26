@@ -1,5 +1,5 @@
 const sender = {
-  triton: {
+  tritonExtreme: {
     sendScaleTunning(value, key) {
       const keyDetails = modelsKeysDetails['zeroOne'][key];
 
@@ -87,9 +87,9 @@ const sender = {
     },
   },
 
-  pa3x: {
+  pax: {
     sendScaleTunning(value, key) {
-      const keyDetails = modelsKeysDetails['pa3x'][key];
+      const keyDetails = modelsKeysDetails['pax'][key];
 
       const sevenBitTuning = pa3xBrain.get7bitsTuningParts();
       sevenBitTuning[keyDetails.portion][keyDetails.index] = value;
@@ -119,7 +119,7 @@ const sender = {
     },
 
     sendScalePreset(scaleType, scaleName) {
-      const presetData = modelsScalesPresets['pa3x'][scaleType][scaleName];
+      const presetData = modelsScalesPresets['pax'][scaleType][scaleName];
       const sevBitTuningParts = pa3xBrain.get7bitsTuningParts();
       pa3xBrain.encodePresetsAndUpdate(presetData, sevBitTuningParts);
 
